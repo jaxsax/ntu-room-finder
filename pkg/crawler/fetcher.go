@@ -6,33 +6,33 @@ import (
 )
 
 type Fetcher interface {
-	Fetch(url string) (result Result, err error)
+	Fetch(url string) (result FetcherResult, err error)
 }
 
-type Result struct {
+type FetcherResult struct {
 	Url  string
 	Body string
 }
 
 type DefaultFetcher struct{}
 
-func Create() Fetcher {
+func NewFetcher() *DefaultFetcher {
 	return &DefaultFetcher{}
 }
 
-func (f DefaultFetcher) Fetch(url string) (Result, error) {
+func (f *DefaultFetcher) Fetch(url string) (FetcherResult, error) {
 	resp, err := http.Get(url)
 	if err != nil {
-		return Result{}, err
+		return FetcherResult{}, err
 	}
 
 	defer resp.Body.Close()
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		return Result{}, err
+		return FetcherResult{}, err
 	}
 
-	return Result{
+	return FetcherResult{
 		Url:  url,
 		Body: string(body),
 	}, nil

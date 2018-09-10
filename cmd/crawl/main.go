@@ -3,9 +3,10 @@ package main
 import (
 	"fmt"
 	"github.com/jaxsax/ntu-room-finder/pkg/crawler"
+	"os"
 )
 
-func addWork(fetcher crawler.Fetcher, url string, resultChannel chan *crawler.Result) {
+func addWork(fetcher crawler.Fetcher, url string, resultChannel chan *crawler.FetcherResult) {
 	fmt.Printf("Fetching %s\n", url)
 	result, err := fetcher.Fetch(url)
 	if err != nil {
@@ -15,13 +16,16 @@ func addWork(fetcher crawler.Fetcher, url string, resultChannel chan *crawler.Re
 }
 
 func main() {
-	fetcher := crawler.Create()
-	resultChannel := make(chan *crawler.Result)
+	parser := crawler.NewParser()
 
-	go addWork(fetcher, "http://google.com", resultChannel)
-	go addWork(fetcher, "http://192.168.1.11:3000", resultChannel)
-	for {
-		result := <-resultChannel
-		fmt.Printf("%s done\n", result.Url)
+	file, err := os.Open("data/main")
+	defer file.Close()
+
+	acadSem, err := parser.FindLatestAcadSem(file)
+	if err != nil {
+		fmt.Printf("cant find latest acad sem: %s\n", err)
+		return
 	}
+
+	fmt.Printf("k: %s val: %s\n", acadSem.Text, acadSem.Key)
 }

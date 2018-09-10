@@ -1,0 +1,645 @@
+<FORM ACTION="AUS_SCHEDULE.main_display1" METHOD="POST" target="_blank">
+<html>
+<head>
+<title>Class Schedule</title>
+<link rel="stylesheet" type="text/css" href="/graphics/css/gui3.css" media = "screen">
+<link rel="stylesheet" type="text/css" href="/graphics/css/print.css" media="print">
+
+    <SCRIPT LANGUAGE="JavaScript">
+    <!-- Begin
+    function StartNewWin(page) {
+    OpenWin = this.open(page, "CtrlWindow", "toolbar=no,menubar=no,location=no,scrollbars=yes,resizable=yes");
+    }
+    // End -->
+    </SCRIPT>
+  
+</head>
+<body onLoad="window.focus()" topmargin="0">
+<div id="ui_student_header_container">
+<div id="ui_header_title_container">
+<div id="ui_print_img">
+<img id="ntubwlogo" src="/graphics/css/NTU_BW_LOGO_150DPI.gif" width="160px" alt="" border="0" />
+</div>
+<p id="ui_header_title1">Class Schedule</p>
+<p id="ui_header_title2">2018,1</p>
+</div>
+</div>
+<div id="ui_nav_container">
+<div id="ui_nav_innercontainer">
+<p id="ui_nav_left"></p>
+<p id="ui_nav_right">
+&nbsp;
+<a class="navline" href="javascript:self.close()" onmouseover="window.status='Exit and close window'; return true;" onmouseout="window.status='';return true;"  >Close</a>
+</p></div >
+</div>
+<div id="ui_body_container">
+<HR size="2">
+<table  border=0 cellspacing=0 cellpadding=0>
+<tr><td>
+<td valign=top span class="smallText2" width="350">
+<SELECT NAME="acadsem" style="font-family: Arial" style="font-size: 8pt" onChange="this.form.action='AUS_SCHEDULE.main_display';this.form.target='_self';this.form.boption.value='x';submit()">
+<option selected="selected" value=2018;1>Acad Yr 2018 Semester 1</option>
+<option value=2017;2>Acad Yr 2017 Semester 2</option>
+<option value=2017;1>Acad Yr 2017 Semester 1</option>
+<option value=2017;S>Acad Yr 2017 Special Term I</option>
+<option value=2017;T>Acad Yr 2017 Special Term II</option>
+<option value=2016;2>Acad Yr 2016 Semester 2</option>
+<option value=2016;1>Acad Yr 2016 Semester 1</option>
+<option value=2016;S>Acad Yr 2016 Special Term I</option>
+<option value=2016;T>Acad Yr 2016 Special Term II</option>
+<option value=2015;2>Acad Yr 2015 Semester 2</option>
+<option value=2015;1>Acad Yr 2015 Semester 1</option>
+<option value=2015;S>Acad Yr 2015 Special Term I</option>
+<option value=2015;T>Acad Yr 2015 Special Term II</option>
+<option value=2014;2>Acad Yr 2014 Semester 2</option>
+<option value=2014;1>Acad Yr 2014 Semester 1</option>
+<option value=2014;S>Acad Yr 2014 Special Term I</option>
+<option value=2014;T>Acad Yr 2014 Special Term II</option>
+</select>
+<BR>
+<SELECT NAME="r_course_yr" style="font-family: Arial" style="font-size: 8pt" size="20">
+<option value=>---Select an Option---</option>
+<option value=ACC;GA;1;F>Accountancy (GA) Year 1</option>
+<option value=ACC;GA;2;F>Accountancy (GA) Year 2</option>
+<option value=ACC;GA;3;F>Accountancy (GA) Year 3</option>
+<option value=ACC;GB;1;F>Accountancy (GB) Year 1</option>
+<option value=ACC;GB;2;F>Accountancy (GB) Year 2</option>
+<option value=ACC;GB;3;F>Accountancy (GB) Year 3</option>
+<option value=ADM;;1;F>Art, Design & Media Year 1</option>
+<option value=ADM;ANIM;2;F>Art, Design & Media (ANIM) Year 2</option>
+<option value=ADM;ANIM;3;F>Art, Design & Media (ANIM) Year 3</option>
+<option value=ADM;ANIM;4;F>Art, Design & Media (ANIM) Year 4</option>
+<option value=ADM;DA;2;F>Art, Design & Media (DA) Year 2</option>
+<option value=ADM;DA;3;F>Art, Design & Media (DA) Year 3</option>
+<option value=ADM;DA;4;F>Art, Design & Media (DA) Year 4</option>
+<option value=ADM;DIPH;2;F>Art, Design & Media (DIPH) Year 2</option>
+<option value=ADM;DIPH;3;F>Art, Design & Media (DIPH) Year 3</option>
+<option value=ADM;DIPH;4;F>Art, Design & Media (DIPH) Year 4</option>
+<option value=ADM;FILM;2;F>Art, Design & Media (FILM) Year 2</option>
+<option value=ADM;FILM;3;F>Art, Design & Media (FILM) Year 3</option>
+<option value=ADM;FILM;4;F>Art, Design & Media (FILM) Year 4</option>
+<option value=ADM;INME;2;F>Art, Design & Media (INME) Year 2</option>
+<option value=ADM;INME;3;F>Art, Design & Media (INME) Year 3</option>
+<option value=ADM;INME;4;F>Art, Design & Media (INME) Year 4</option>
+<option value=ADM;MA;2;F>Art, Design & Media (MA) Year 2</option>
+<option value=ADM;MA;3;F>Art, Design & Media (MA) Year 3</option>
+<option value=ADM;MA;4;F>Art, Design & Media (MA) Year 4</option>
+<option value=ADM;PROD;2;F>Art, Design & Media (PROD) Year 2</option>
+<option value=ADM;PROD;3;F>Art, Design & Media (PROD) Year 3</option>
+<option value=ADM;PROD;4;F>Art, Design & Media (PROD) Year 4</option>
+<option value=ADM;VISC;2;F>Art, Design & Media (VISC) Year 2</option>
+<option value=ADM;VISC;3;F>Art, Design & Media (VISC) Year 3</option>
+<option value=ADM;VISC;4;F>Art, Design & Media (VISC) Year 4</option>
+<option value=AERO;;1;F>Aerospace Engineering Year 1</option>
+<option value=AERO;;2;F>Aerospace Engineering Year 2</option>
+<option value=AERO;;3;F>Aerospace Engineering Year 3</option>
+<option value=AERO;;4;F>Aerospace Engineering Year 4</option>
+<option value=BIE;;1;F>Bioengineering Year 1</option>
+<option value=BIE;;2;F>Bioengineering Year 2</option>
+<option value=BIE;;3;F>Bioengineering Year 3</option>
+<option value=BIE;;4;F>Bioengineering Year 4</option>
+<option value=BMS;;1;F>Biomedical Sciences Year 1</option>
+<option value=BMS;;2;F>Biomedical Sciences Year 2</option>
+<option value=BMS;;3;F>Biomedical Sciences Year 3</option>
+<option value=BS;;1;F>Biological Sciences Year 1</option>
+<option value=BS;;2;F>Biological Sciences Year 2</option>
+<option value=BS;;3;F>Biological Sciences Year 3</option>
+<option value=BS;;4;F>Biological Sciences Year 4</option>
+<option value=BSPY;;1;F>Biological Sciences And Psychology Year 1</option>
+<option value=BSPY;;2;F>Biological Sciences And Psychology Year 2</option>
+<option value=BUS;;1;F>Business Year 1</option>
+<option value=BUS;ACS;2;F>Business (ACS) Year 2</option>
+<option value=BUS;ACS;3;F>Business (ACS) Year 3</option>
+<option value=BUS;AWM;2;F>Business (AWM) Year 2</option>
+<option value=BUS;AWM;3;F>Business (AWM) Year 3</option>
+<option value=BUS;BA;2;F>Business (BA) Year 2</option>
+<option value=BUS;BA;3;F>Business (BA) Year 3</option>
+<option value=BUS;BAF;2;F>Business (BAF) Year 2</option>
+<option value=BUS;BAF;3;F>Business (BAF) Year 3</option>
+<option value=BUS;GA;1;F>Business (GA) Year 1</option>
+<option value=BUS;GB;1;F>Business (GB) Year 1</option>
+<option value=BUS;HRC;2;F>Business (HRC) Year 2</option>
+<option value=BUS;HRC;3;F>Business (HRC) Year 3</option>
+<option value=BUS;IT;2;F>Business (IT) Year 2</option>
+<option value=BUS;IT;3;F>Business (IT) Year 3</option>
+<option value=BUS;ITT;2;F>Business (ITT) Year 2</option>
+<option value=BUS;ITT;3;F>Business (ITT) Year 3</option>
+<option value=BUS;MKG;2;F>Business (MKG) Year 2</option>
+<option value=BUS;MKG;3;F>Business (MKG) Year 3</option>
+<option value=BUS;PBL;2;F>Business (PBL) Year 2</option>
+<option value=BUS;PBL;3;F>Business (PBL) Year 3</option>
+<option value=BUS;RMI;2;F>Business (RMI) Year 2</option>
+<option value=BUS;RMI;3;F>Business (RMI) Year 3</option>
+<option value=BUS;THM;2;F>Business (THM) Year 2</option>
+<option value=BUS;THM;3;F>Business (THM) Year 3</option>
+<option value=CBE;;1;F>Chemical & Biomolecular Engineering Year 1</option>
+<option value=CBE;;2;F>Chemical & Biomolecular Engineering Year 2</option>
+<option value=CBE;;3;F>Chemical & Biomolecular Engineering Year 3</option>
+<option value=CBE;;4;F>Chemical & Biomolecular Engineering Year 4</option>
+<option value=CE;;1;F>Computer Engineering Year 1</option>
+<option value=CE;;2;F>Computer Engineering Year 2</option>
+<option value=CE;;3;F>Computer Engineering Year 3</option>
+<option value=CE;;4;F>Computer Engineering Year 4</option>
+<option value=CEE;;2;F>Civil Engineering Year 2</option>
+<option value=CEE;;3;F>Civil Engineering Year 3</option>
+<option value=CEE;;4;F>Civil Engineering Year 4</option>
+<option value=CHEM;;1;F>Chemistry and Biological Chemistry Year 1</option>
+<option value=CHEM;;2;F>Chemistry and Biological Chemistry Year 2</option>
+<option value=CHEM;;3;F>Chemistry and Biological Chemistry Year 3</option>
+<option value=CHEM;;4;F>Chemistry and Biological Chemistry Year 4</option>
+<option value=CHIN;;1;F>Chinese Year 1</option>
+<option value=CHIN;;2;F>Chinese Year 2</option>
+<option value=CHIN;;3;F>Chinese Year 3</option>
+<option value=CHIN;;4;F>Chinese Year 4</option>
+<option value=CS;;1;F>Communication Studies Year 1</option>
+<option value=CS;;2;F>Communication Studies Year 2</option>
+<option value=CS;;3;F>Communication Studies Year 3</option>
+<option value=CS;;4;F>Communication Studies Year 4</option>
+<option value=CSC;;1;F>Computer Science Year 1</option>
+<option value=CSC;;2;F>Computer Science Year 2</option>
+<option value=CSC;;3;F>Computer Science Year 3</option>
+<option value=CSC;;4;F>Computer Science Year 4</option>
+<option value=DSAI;;1;F>Data Science And Artificial Intelligence Year 1</option>
+<option value=ECMA;;1;F>Economics And Media Analytics Year 1</option>
+<option value=ECMA;;2;F>Economics And Media Analytics Year 2</option>
+<option value=ECMA;;3;F>Economics And Media Analytics Year 3</option>
+<option value=ECMA;;4;F>Economics And Media Analytics Year 4</option>
+<option value=ECON;;1;F>Economics Year 1</option>
+<option value=ECON;;2;F>Economics Year 2</option>
+<option value=ECON;;3;F>Economics Year 3</option>
+<option value=ECON;;4;F>Economics Year 4</option>
+<option value=ECPP;;1;F>Economics And Public Policy & Global Affairs Year 1</option>
+<option value=ECPP;;2;F>Economics And Public Policy & Global Affairs Year 2</option>
+<option value=ECPP;;3;F>Economics And Public Policy & Global Affairs Year 3</option>
+<option value=ECPP;;4;F>Economics And Public Policy & Global Affairs Year 4</option>
+<option value=ECPS;;1;F>Economics And Psychology Year 1</option>
+<option value=ECPS;;2;F>Economics And Psychology Year 2</option>
+<option value=ECPS;;3;F>Economics And Psychology Year 3</option>
+<option value=ECPS;;4;F>Economics And Psychology Year 4</option>
+<option value=EEE;;2;F>Electrical & Electronic Engineering Year 2</option>
+<option value=EEE;;3;F>Electrical & Electronic Engineering Year 3</option>
+<option value=EEE;;4;F>Electrical & Electronic Engineering Year 4</option>
+<option value=EESS;;1;F>Environmental Earth Systems Science Year 1</option>
+<option value=EESS;;2;F>Environmental Earth Systems Science Year 2</option>
+<option value=EESS;ECO;3;F>Environmental Earth Systems Science (ECO) Year 3</option>
+<option value=EESS;ECO;4;F>Environmental Earth Systems Science (ECO) Year 4</option>
+<option value=EESS;GEOS;3;F>Environmental Earth Systems Science (GEOS) Year 3</option>
+<option value=EESS;GEOS;4;F>Environmental Earth Systems Science (GEOS) Year 4</option>
+<option value=EESS;SOES;3;F>Environmental Earth Systems Science (SOES) Year 3</option>
+<option value=EESS;SOES;4;F>Environmental Earth Systems Science (SOES) Year 4</option>
+<option value=ELAH;;1;F>English Literature And Art History Year 1</option>
+<option value=ELAH;;2;F>English Literature And Art History Year 2</option>
+<option value=ELAH;;3;F>English Literature And Art History Year 3</option>
+<option value=ELAH;;4;F>English Literature And Art History Year 4</option>
+<option value=ELH;;1;F>English Year 1</option>
+<option value=ELH;;2;F>English Year 2</option>
+<option value=ELH;;3;F>English Year 3</option>
+<option value=ELH;;4;F>English Year 4</option>
+<option value=ENE;;1;F>Environmental Engineering Year 1</option>
+<option value=ENE;;2;F>Environmental Engineering Year 2</option>
+<option value=ENE;;3;F>Environmental Engineering Year 3</option>
+<option value=ENE;;4;F>Environmental Engineering Year 4</option>
+<option value=ENG;;1;F>Engineering Year 1</option>
+<option value=ENG;CEE;1;F>Engineering (CEE) Year 1</option>
+<option value=ENG;EEE;1;F>Engineering (EEE) Year 1</option>
+<option value=ENG;ENE;1;F>Engineering (ENE) Year 1</option>
+<option value=ENG;ME;1;F>Engineering (ME) Year 1</option>
+<option value=ESPP;;1;F>Environmental Earth Systems Science And Public Policy & Global Affairs Year 1</option>
+<option value=ESPP;;2;F>Environmental Earth Systems Science And Public Policy & Global Affairs Year 2</option>
+<option value=ESPP;;3;F>Environmental Earth Systems Science And Public Policy & Global Affairs Year 3</option>
+<option value=ESPP;;4;F>Environmental Earth Systems Science And Public Policy & Global Affairs Year 4</option>
+<option value=HIST;;1;F>History Year 1</option>
+<option value=HIST;;2;F>History Year 2</option>
+<option value=HIST;;3;F>History Year 3</option>
+<option value=HIST;;4;F>History Year 4</option>
+<option value=IEM;;1;F>Information Engineering & Media Year 1</option>
+<option value=IEM;;2;F>Information Engineering & Media Year 2</option>
+<option value=IEM;;3;F>Information Engineering & Media Year 3</option>
+<option value=IEM;;4;F>Information Engineering & Media Year 4</option>
+<option value=LMS;;1;F>Linguistics & Multilingual Studies Year 1</option>
+<option value=LMS;;2;F>Linguistics & Multilingual Studies Year 2</option>
+<option value=LMS;;3;F>Linguistics & Multilingual Studies Year 3</option>
+<option value=LMS;;4;F>Linguistics & Multilingual Studies Year 4</option>
+<option value=MAEC;;1;F>Mathematics & Economics Year 1</option>
+<option value=MAEC;;2;F>Mathematics & Economics Year 2</option>
+<option value=MAEC;;3;F>Mathematics & Economics Year 3</option>
+<option value=MAEC;;4;F>Mathematics & Economics Year 4</option>
+<option value=MAEO;;1;F>Mathematical Sciences And Economics Year 1</option>
+<option value=MAEO;;2;F>Mathematical Sciences And Economics Year 2</option>
+<option value=MAEO;AMAS;2;F>Mathematical Sciences And Economics (AMAS) Year 2</option>
+<option value=MAEO;BA;2;F>Mathematical Sciences And Economics (BA) Year 2</option>
+<option value=MAEO;BA;3;F>Mathematical Sciences And Economics (BA) Year 3</option>
+<option value=MAEO;BA;4;F>Mathematical Sciences And Economics (BA) Year 4</option>
+<option value=MAEO;PMAS;2;F>Mathematical Sciences And Economics (PMAS) Year 2</option>
+<option value=MAEO;STAT;2;F>Mathematical Sciences And Economics (STAT) Year 2</option>
+<option value=MAT;;1;F>Materials Engineering Year 1</option>
+<option value=MAT;;2;F>Materials Engineering Year 2</option>
+<option value=MAT;;3;F>Materials Engineering Year 3</option>
+<option value=MAT;;4;F>Materials Engineering Year 4</option>
+<option value=MATH;;1;F>Mathematical Sciences Year 1</option>
+<option value=MATH;;2;F>Mathematical Sciences Year 2</option>
+<option value=MATH;;3;F>Mathematical Sciences Year 3</option>
+<option value=MATH;AMAS;1;F>Mathematical Sciences (AMAS) Year 1</option>
+<option value=MATH;AMAS;2;F>Mathematical Sciences (AMAS) Year 2</option>
+<option value=MATH;AMAS;3;F>Mathematical Sciences (AMAS) Year 3</option>
+<option value=MATH;AMAS;4;F>Mathematical Sciences (AMAS) Year 4</option>
+<option value=MATH;BA;1;F>Mathematical Sciences (BA) Year 1</option>
+<option value=MATH;BA;2;F>Mathematical Sciences (BA) Year 2</option>
+<option value=MATH;BA;3;F>Mathematical Sciences (BA) Year 3</option>
+<option value=MATH;BA;4;F>Mathematical Sciences (BA) Year 4</option>
+<option value=MATH;PMAS;1;F>Mathematical Sciences (PMAS) Year 1</option>
+<option value=MATH;PMAS;2;F>Mathematical Sciences (PMAS) Year 2</option>
+<option value=MATH;STAT;1;F>Mathematical Sciences (STAT) Year 1</option>
+<option value=MATH;STAT;2;F>Mathematical Sciences (STAT) Year 2</option>
+<option value=MATH;STAT;3;F>Mathematical Sciences (STAT) Year 3</option>
+<option value=MATH;STAT;4;F>Mathematical Sciences (STAT) Year 4</option>
+<option value=ME;;2;F>Mechanical Engineering Year 2</option>
+<option value=ME;;3;F>Mechanical Engineering Year 3</option>
+<option value=ME;;4;F>Mechanical Engineering Year 4</option>
+<option value=ME;DES;2;F>Mechanical Engineering (DES) Year 2</option>
+<option value=ME;DES;3;F>Mechanical Engineering (DES) Year 3</option>
+<option value=ME;DES;4;F>Mechanical Engineering (DES) Year 4</option>
+<option value=ME;RMS;2;F>Mechanical Engineering (RMS) Year 2</option>
+<option value=ME;RMS;3;F>Mechanical Engineering (RMS) Year 3</option>
+<option value=ME;RMS;4;F>Mechanical Engineering (RMS) Year 4</option>
+<option value=MS;;1;F>Maritime Studies Year 1</option>
+<option value=MS;;2;F>Maritime Studies Year 2</option>
+<option value=MS;;4;F>Maritime Studies Year 4</option>
+<option value=MS;ITG;1;F>Maritime Studies (ITG) Year 1</option>
+<option value=MS;ITG;2;F>Maritime Studies (ITG) Year 2</option>
+<option value=MS;ITG;4;F>Maritime Studies (ITG) Year 4</option>
+<option value=MS;MSB;1;F>Maritime Studies (MSB) Year 1</option>
+<option value=MS;MSB;2;F>Maritime Studies (MSB) Year 2</option>
+<option value=MS;MSB;4;F>Maritime Studies (MSB) Year 4</option>
+<option value=PHIL;;1;F>Philosophy Year 1</option>
+<option value=PHIL;;2;F>Philosophy Year 2</option>
+<option value=PHIL;;3;F>Philosophy Year 3</option>
+<option value=PHIL;;4;F>Philosophy Year 4</option>
+<option value=PHY;;1;F>Physics and Applied Physics Year 1</option>
+<option value=PHY;;2;F>Physics and Applied Physics Year 2</option>
+<option value=PHY;APHY;1;F>Physics and Applied Physics (APHY) Year 1</option>
+<option value=PHY;APHY;2;F>Physics and Applied Physics (APHY) Year 2</option>
+<option value=PHY;APHY;3;F>Physics and Applied Physics (APHY) Year 3</option>
+<option value=PHY;APHY;4;F>Physics and Applied Physics (APHY) Year 4</option>
+<option value=PHY;PPHY;1;F>Physics and Applied Physics (PPHY) Year 1</option>
+<option value=PHY;PPHY;2;F>Physics and Applied Physics (PPHY) Year 2</option>
+<option value=PHY;PPHY;3;F>Physics and Applied Physics (PPHY) Year 3</option>
+<option value=PHY;PPHY;4;F>Physics and Applied Physics (PPHY) Year 4</option>
+<option value=PPGA;;1;F>Public Policy And Global Affairs Year 1</option>
+<option value=PPGA;;2;F>Public Policy And Global Affairs Year 2</option>
+<option value=PPGA;;3;F>Public Policy And Global Affairs Year 3</option>
+<option value=PPGA;;4;F>Public Policy And Global Affairs Year 4</option>
+<option value=PSLM;;1;F>Psychology And Linguistics & Multilingual Studies Year 1</option>
+<option value=PSLM;;2;F>Psychology And Linguistics & Multilingual Studies Year 2</option>
+<option value=PSLM;;3;F>Psychology And Linguistics & Multilingual Studies Year 3</option>
+<option value=PSLM;;4;F>Psychology And Linguistics & Multilingual Studies Year 4</option>
+<option value=PSMA;;1;F>Psychology And Media Analytics Year 1</option>
+<option value=PSMA;;2;F>Psychology And Media Analytics Year 2</option>
+<option value=PSMA;;3;F>Psychology And Media Analytics Year 3</option>
+<option value=PSMA;;4;F>Psychology And Media Analytics Year 4</option>
+<option value=PSY;;1;F>Psychology Year 1</option>
+<option value=PSY;;2;F>Psychology Year 2</option>
+<option value=PSY;;3;F>Psychology Year 3</option>
+<option value=PSY;;4;F>Psychology Year 4</option>
+<option value=REP;;1;F>Renaissance Engineering Year 1</option>
+<option value=REP;AERO;2;F>Renaissance Engineering (AERO) Year 2</option>
+<option value=REP;ASEN;2;F>Renaissance Engineering (ASEN) Year 2</option>
+<option value=REP;ASEN;4;F>Renaissance Engineering (ASEN) Year 4</option>
+<option value=REP;BIE;2;F>Renaissance Engineering (BIE) Year 2</option>
+<option value=REP;CBE;2;F>Renaissance Engineering (CBE) Year 2</option>
+<option value=REP;CE;2;F>Renaissance Engineering (CE) Year 2</option>
+<option value=REP;CE;4;F>Renaissance Engineering (CE) Year 4</option>
+<option value=REP;CSC;2;F>Renaissance Engineering (CSC) Year 2</option>
+<option value=REP;CSC;4;F>Renaissance Engineering (CSC) Year 4</option>
+<option value=REP;CVEN;2;F>Renaissance Engineering (CVEN) Year 2</option>
+<option value=REP;CVEN;4;F>Renaissance Engineering (CVEN) Year 4</option>
+<option value=REP;EEE;2;F>Renaissance Engineering (EEE) Year 2</option>
+<option value=REP;ENE;2;F>Renaissance Engineering (ENE) Year 2</option>
+<option value=REP;MAT;2;F>Renaissance Engineering (MAT) Year 2</option>
+<option value=REP;ME;2;F>Renaissance Engineering (ME) Year 2</option>
+<option value=REP;ME;4;F>Renaissance Engineering (ME) Year 4</option>
+<option value=SOC;;1;F>Sociology Year 1</option>
+<option value=SOC;;2;F>Sociology Year 2</option>
+<option value=SOC;;3;F>Sociology Year 3</option>
+<option value=SOC;;4;F>Sociology Year 4</option>
+<option value=SSM;;1;F>Sport Science & Management Year 1</option>
+<option value=SSM;;2;F>Sport Science & Management Year 2</option>
+<option value=SSM;;3;F>Sport Science & Management Year 3</option>
+<option value=SSM;;4;F>Sport Science & Management Year 4</option>
+<option value=> </option>
+<option value=>---Double Degree---</option>
+<option value=ACBS;ACS;2;F>Accountancy And Business (ACS) Year 2</option>
+<option value=ACBS;ACS;4;F>Accountancy And Business (ACS) Year 4</option>
+<option value=ACBS;BA;2;F>Accountancy And Business (BA) Year 2</option>
+<option value=ACBS;BA;3;F>Accountancy And Business (BA) Year 3</option>
+<option value=ACBS;BA;4;F>Accountancy And Business (BA) Year 4</option>
+<option value=ACBS;BAF;2;F>Accountancy And Business (BAF) Year 2</option>
+<option value=ACBS;BAF;3;F>Accountancy And Business (BAF) Year 3</option>
+<option value=ACBS;BAF;4;F>Accountancy And Business (BAF) Year 4</option>
+<option value=ACBS;GA;1;F>Accountancy And Business (GA) Year 1</option>
+<option value=ACBS;GA;2;F>Accountancy And Business (GA) Year 2</option>
+<option value=ACBS;GA;3;F>Accountancy And Business (GA) Year 3</option>
+<option value=ACBS;GA;4;F>Accountancy And Business (GA) Year 4</option>
+<option value=ACBS;GB;1;F>Accountancy And Business (GB) Year 1</option>
+<option value=ACBS;GB;2;F>Accountancy And Business (GB) Year 2</option>
+<option value=ACBS;GB;3;F>Accountancy And Business (GB) Year 3</option>
+<option value=ACBS;GB;4;F>Accountancy And Business (GB) Year 4</option>
+<option value=ACBS;HRC;2;F>Accountancy And Business (HRC) Year 2</option>
+<option value=ACBS;HRC;3;F>Accountancy And Business (HRC) Year 3</option>
+<option value=ACBS;HRC;4;F>Accountancy And Business (HRC) Year 4</option>
+<option value=ACBS;IT;2;F>Accountancy And Business (IT) Year 2</option>
+<option value=ACBS;IT;3;F>Accountancy And Business (IT) Year 3</option>
+<option value=ACBS;IT;4;F>Accountancy And Business (IT) Year 4</option>
+<option value=ACBS;ITT;2;F>Accountancy And Business (ITT) Year 2</option>
+<option value=ACBS;ITT;3;F>Accountancy And Business (ITT) Year 3</option>
+<option value=ACBS;ITT;4;F>Accountancy And Business (ITT) Year 4</option>
+<option value=ACBS;MKG;2;F>Accountancy And Business (MKG) Year 2</option>
+<option value=ACBS;MKG;3;F>Accountancy And Business (MKG) Year 3</option>
+<option value=ACBS;MKG;4;F>Accountancy And Business (MKG) Year 4</option>
+<option value=ACBS;PBL;2;F>Accountancy And Business (PBL) Year 2</option>
+<option value=ACBS;PBL;3;F>Accountancy And Business (PBL) Year 3</option>
+<option value=ACBS;PBL;4;F>Accountancy And Business (PBL) Year 4</option>
+<option value=ACBS;RMI;2;F>Accountancy And Business (RMI) Year 2</option>
+<option value=ACBS;RMI;3;F>Accountancy And Business (RMI) Year 3</option>
+<option value=ACBS;RMI;4;F>Accountancy And Business (RMI) Year 4</option>
+<option value=ACBS;THM;2;F>Accountancy And Business (THM) Year 2</option>
+<option value=ACBS;THM;3;F>Accountancy And Business (THM) Year 3</option>
+<option value=ACBS;THM;4;F>Accountancy And Business (THM) Year 4</option>
+<option value=ASEC;;1;F>Aerospace Engineering And Economics Year 1</option>
+<option value=ASEC;;2;F>Aerospace Engineering And Economics Year 2</option>
+<option value=ASEC;;3;F>Aerospace Engineering And Economics Year 3</option>
+<option value=ASEC;;4;F>Aerospace Engineering And Economics Year 4</option>
+<option value=ASEC;;5;F>Aerospace Engineering And Economics Year 5</option>
+<option value=BCE;;1;F>Business And Computer Engineering Year 1</option>
+<option value=BCE;;4;F>Business And Computer Engineering Year 4</option>
+<option value=BCG;;1;F>Business And Computing Year 1</option>
+<option value=BCG;;2;F>Business And Computing Year 2</option>
+<option value=BCG;;3;F>Business And Computing Year 3</option>
+<option value=BCG;;4;F>Business And Computing Year 4</option>
+<option value=BEEC;;1;F>Bioengineering And Economics Year 1</option>
+<option value=BEEC;;2;F>Bioengineering And Economics Year 2</option>
+<option value=BEEC;;3;F>Bioengineering And Economics Year 3</option>
+<option value=BEEC;;4;F>Bioengineering And Economics Year 4</option>
+<option value=CBEC;;1;F>Chemical & Biomolecular Engineering And Economics Year 1</option>
+<option value=CBEC;;2;F>Chemical & Biomolecular Engineering And Economics Year 2</option>
+<option value=CBEC;;3;F>Chemical & Biomolecular Engineering And Economics Year 3</option>
+<option value=CBEC;;4;F>Chemical & Biomolecular Engineering And Economics Year 4</option>
+<option value=CBEC;;5;F>Chemical & Biomolecular Engineering And Economics Year 5</option>
+<option value=CEEC;;1;F>Computer Engineering And Economics Year 1</option>
+<option value=CEEC;;2;F>Computer Engineering And Economics Year 2</option>
+<option value=CEEC;;3;F>Computer Engineering And Economics Year 3</option>
+<option value=CEEC;;4;F>Computer Engineering And Economics Year 4</option>
+<option value=CEEC;;5;F>Computer Engineering And Economics Year 5</option>
+<option value=CSEC;;1;F>Computer Science And Economics Year 1</option>
+<option value=CSEC;;2;F>Computer Science And Economics Year 2</option>
+<option value=CSEC;;3;F>Computer Science And Economics Year 3</option>
+<option value=CSEC;;4;F>Computer Science And Economics Year 4</option>
+<option value=CSEC;;5;F>Computer Science And Economics Year 5</option>
+<option value=CVEC;;1;F>Civil Engineering And Economics Year 1</option>
+<option value=CVEC;;2;F>Civil Engineering And Economics Year 2</option>
+<option value=CVEC;;3;F>Civil Engineering And Economics Year 3</option>
+<option value=CVEC;;4;F>Civil Engineering And Economics Year 4</option>
+<option value=CVEC;;5;F>Civil Engineering And Economics Year 5</option>
+<option value=EEEC;;1;F>Electrical & Electronic Engineering And Economics Year 1</option>
+<option value=EEEC;;2;F>Electrical & Electronic Engineering And Economics Year 2</option>
+<option value=EEEC;;3;F>Electrical & Electronic Engineering And Economics Year 3</option>
+<option value=EEEC;;4;F>Electrical & Electronic Engineering And Economics Year 4</option>
+<option value=EEEC;;5;F>Electrical & Electronic Engineering And Economics Year 5</option>
+<option value=ENEC;;1;F>Environmental Engineering And Economics Year 1</option>
+<option value=ENEC;;2;F>Environmental Engineering And Economics Year 2</option>
+<option value=ENEC;;3;F>Environmental Engineering And Economics Year 3</option>
+<option value=ENEC;;4;F>Environmental Engineering And Economics Year 4</option>
+<option value=ENEC;;5;F>Environmental Engineering And Economics Year 5</option>
+<option value=IEEC;;1;F>Information Engineering & Media And Economics Year 1</option>
+<option value=IEEC;;2;F>Information Engineering & Media And Economics Year 2</option>
+<option value=IEEC;;3;F>Information Engineering & Media And Economics Year 3</option>
+<option value=IEEC;;4;F>Information Engineering & Media And Economics Year 4</option>
+<option value=IEEC;;5;F>Information Engineering & Media And Economics Year 5</option>
+<option value=MEEC;;1;F>Mechanical Engineering And Economics Year 1</option>
+<option value=MEEC;;2;F>Mechanical Engineering And Economics Year 2</option>
+<option value=MEEC;;3;F>Mechanical Engineering And Economics Year 3</option>
+<option value=MEEC;;4;F>Mechanical Engineering And Economics Year 4</option>
+<option value=MEEC;;5;F>Mechanical Engineering And Economics Year 5</option>
+<option value=MEEC;DES;1;F>Mechanical Engineering And Economics (DES) Year 1</option>
+<option value=MEEC;DES;2;F>Mechanical Engineering And Economics (DES) Year 2</option>
+<option value=MEEC;DES;3;F>Mechanical Engineering And Economics (DES) Year 3</option>
+<option value=MEEC;DES;4;F>Mechanical Engineering And Economics (DES) Year 4</option>
+<option value=MEEC;DES;5;F>Mechanical Engineering And Economics (DES) Year 5</option>
+<option value=MEEC;RMS;1;F>Mechanical Engineering And Economics (RMS) Year 1</option>
+<option value=MEEC;RMS;2;F>Mechanical Engineering And Economics (RMS) Year 2</option>
+<option value=MEEC;RMS;3;F>Mechanical Engineering And Economics (RMS) Year 3</option>
+<option value=MEEC;RMS;4;F>Mechanical Engineering And Economics (RMS) Year 4</option>
+<option value=MEEC;RMS;5;F>Mechanical Engineering And Economics (RMS) Year 5</option>
+<option value=MTEC;;1;F>Materials Engineering And Economics Year 1</option>
+<option value=MTEC;;2;F>Materials Engineering And Economics Year 2</option>
+<option value=MTEC;;3;F>Materials Engineering And Economics Year 3</option>
+<option value=MTEC;;4;F>Materials Engineering And Economics Year 4</option>
+<option value=MTEC;;5;F>Materials Engineering And Economics Year 5</option>
+<option value=> </option>
+<option value=>---Part Time Degree---</option>
+<option value=EEE;;1;P>Electrical & Electronic Engineering(PartTime) Year 1</option>
+<option value=EEE;;2;P>Electrical & Electronic Engineering(PartTime) Year 2</option>
+<option value=EEE;;3;P>Electrical & Electronic Engineering(PartTime) Year 3</option>
+<option value=EEE;;4;P>Electrical & Electronic Engineering(PartTime) Year 4</option>
+<option value=EEE;;5;P>Electrical & Electronic Engineering(PartTime) Year 5</option>
+<option value=ME;;1;P>Mechanical Engineering(PartTime) Year 1</option>
+<option value=ME;;2;P>Mechanical Engineering(PartTime) Year 2</option>
+<option value=ME;;3;P>Mechanical Engineering(PartTime) Year 3</option>
+<option value=ME;;4;P>Mechanical Engineering(PartTime) Year 4</option>
+<option value=ME;;5;P>Mechanical Engineering(PartTime) Year 5</option>
+<option value=CSC;;1;P>Computer Science(PartTime) Year 1</option>
+<option value=CSC;;2;P>Computer Science(PartTime) Year 2</option>
+<option value=CSC;;3;P>Computer Science(PartTime) Year 3</option>
+<option value=> </option>
+<option value=MLOAD;AHIS;X;F>Minor in Art History</option>
+<option value=MLOAD;APY;X;F>Minor in Applied Physics</option>
+<option value=MLOAD;CCW;X;F>Minor in Chinese Creative Writing</option>
+<option value=MLOAD;CDA;X;F>Minor in Computing And Data Analysis</option>
+<option value=MLOAD;CHEM;X;F>Minor in Chemistry And Biological Chemistry</option>
+<option value=MLOAD;CHIN;X;F>Minor in Chinese</option>
+<option value=MLOAD;CM;X;F>Minor in Computing</option>
+<option value=MLOAD;CS;X;F>Minor in Communication Studies</option>
+<option value=MLOAD;CW;X;F>Minor in Creative Writing</option>
+<option value=MLOAD;DRA;X;F>Minor in Drama And Performance</option>
+<option value=MLOAD;ECHE;X;F>Minor in Early Childhood Education</option>
+<option value=MLOAD;ECON;X;F>Minor in Economics</option>
+<option value=MLOAD;EDU;X;F>Minor in Education Studies</option>
+<option value=MLOAD;ELIT;X;F>Minor in English Literature</option>
+<option value=MLOAD;ENGY;X;F>Minor in Energy</option>
+<option value=MLOAD;ENT;X;F>Minor in Entrepreneurship</option>
+<option value=MLOAD;ENUS;X;F>Minor in Environmental And Urban Studies</option>
+<option value=MLOAD;ENV;X;F>Minor in Environmental Management</option>
+<option value=MLOAD;ENVS;X;F>Minor in Environmental Sustainability</option>
+<option value=MLOAD;FIN;X;F>Minor in Finance</option>
+<option value=MLOAD;FS;X;F>Minor in Film Studies</option>
+<option value=MLOAD;GA;X;F>Minor in Global Asia</option>
+<option value=MLOAD;HIST;X;F>Minor in History</option>
+<option value=MLOAD;HPA;X;F>Minor in Public Administration</option>
+<option value=MLOAD;ICT;X;F>Minor in Information-Communication Technology</option>
+<option value=MLOAD;LFSC;X;F>Minor in Life Sciences</option>
+<option value=MLOAD;LING;X;F>Minor in Linguistics And Multilingual Studies</option>
+<option value=MLOAD;MATH;X;F>Minor in Mathematics</option>
+<option value=MLOAD;MUS;X;F>Minor in Music</option>
+<option value=MLOAD;NBS;X;F>Minor in Business</option>
+<option value=MLOAD;PHIL;X;F>Minor in Philosophy</option>
+<option value=MLOAD;PHY;X;F>Minor in Physics</option>
+<option value=MLOAD;PPGA;X;F>Minor in Public Policy And Global Affairs</option>
+<option value=MLOAD;PSY;X;F>Minor in Psychology</option>
+<option value=MLOAD;RMI;X;F>Minor in Risk Management And Insurance</option>
+<option value=MLOAD;SC;X;F>Minor in Strategic Communication</option>
+<option value=MLOAD;SOC;X;F>Minor in Sociology</option>
+<option value=MLOAD;SSCI;X;F>Minor in Sport  Science</option>
+<option value=MLOAD;SYMT;X;F>Minor in Systems Management</option>
+<option value=MLOAD;STS;X;F>Minor in Science, Technology And Society</option>
+<option value=MLOAD;TRAN;X;F>Minor in Translation</option>
+<option value=> </option>
+<option value=GERP;AHSS;X;F>General Education in Art, Humanities and Social Sciences</option>
+<option value=GERP;BM;X;F>General Education in Business & Management</option>
+<option value=GERP;STS;X;F>General Education in Science, Technology & Society</option>
+<option value=GERP;LS;X;F>General Education in Liberal Studies</option>
+<option value=GERP;LA;X;F>General Education in Liberal Arts</option>
+<option value=> </option>
+<option value=EP;EP;X;F>English Proficiency</option>
+<option value=> </option>
+<option value=CNY;CNY;X;F>C N Yang Scholars Programme</option>
+<option value=> </option>
+<option value=USP;CORE;X;F>University Scholars Programme (Core)</option>
+<option value=USP;SS;X;F>University Scholars Programme in Social Science</option>
+<option value=USP;AHC;X;F>University Scholars Programme in Arts, Humanities and Culture</option>
+<option value=USP;IS;X;F>University Scholars Programme in Interdisciplinary Studies</option>
+<option value=USP;SE;X;F>University Scholars Programme in Science and Engineering</option>
+<option value=USP;STS;X;F>University Scholars Programme in Science, Technology & Society</option>
+<option value=> </option>
+<option value=>---All Unrestricted Electives---</option>
+<option value=GLOAD;ACC;X;F>Accountancy</option>
+<option value=GLOAD;ADM;X;F>Art, Design & Media</option>
+<option value=GLOAD;BIE;X;F>Bioengineering</option>
+<option value=GLOAD;BS;X;F>Biological Sciences</option>
+<option value=GLOAD;BUS;X;F>Business</option>
+<option value=GLOAD;CBE;X;F>Chemical & Biomolecular Engineering</option>
+<option value=GLOAD;CE;X;F>Computer Engineering</option>
+<option value=GLOAD;CEE;X;F>Civil Engineering</option>
+<option value=GLOAD;CHEM;X;F>Chemistry and Biological Chemistry</option>
+<option value=GLOAD;CHIN;X;F>Chinese</option>
+<option value=GLOAD;CS;X;F>Communication Studies</option>
+<option value=GLOAD;CSC;X;F>Computer Science</option>
+<option value=GLOAD;ECON;X;F>Economics</option>
+<option value=GLOAD;EEE;X;F>Electrical & Electronic Engineering</option>
+<option value=GLOAD;EESS;X;F>Environmental Earth Systems Science</option>
+<option value=GLOAD;ELH;X;F>English</option>
+<option value=GLOAD;HIST;X;F>History</option>
+<option value=GLOAD;LMS;X;F>Linguistics & Multilingual Studies</option>
+<option value=GLOAD;MAT;X;F>Materials Engineering</option>
+<option value=GLOAD;MATH;X;F>Mathematical Sciences</option>
+<option value=GLOAD;ME;X;F>Mechanical Engineering</option>
+<option value=GLOAD;MS;X;F>Maritime Studies</option>
+<option value=GLOAD;NIE;X;F>National Institute of Education</option>
+<option value=GLOAD;NTC;X;F>Nanyang Technopreneurship Centre</option>
+<option value=GLOAD;PHIL;X;F>Philosophy</option>
+<option value=GLOAD;PHY;X;F>Physics and Applied Physics</option>
+<option value=GLOAD;PPGA;X;F>Public Policy And Global Affairs</option>
+<option value=GLOAD;PSY;X;F>Psychology</option>
+<option value=GLOAD;SOC;X;F>Sociology</option>
+<option value=GLOAD;SOH;X;F>Humanities</option>
+<option value=GLOAD;SPS;X;F>Physical and Mathematical Sciences</option>
+<option value=GLOAD;SSM;X;F>Sport Science & Management</option>
+<option value=GLOAD;SSS;X;F>Social Sciences</option>
+</select>
+<script>
+function select_option(form) 
+       {
+        var i=0;
+        var j=0;
+        var ans;
+
+
+	       if (form.elements[1].value=="") 
+			      {
+         	   alert("Please select an option.");
+		         return; 
+            } form.elements[3].value="Enter Keywords or Course Code"; return true;
+      } 
+     
+</script>
+<INPUT style="font-size: 8pt" TYPE="button" VALUE="Load Class Schedule" OnClick="if (select_option(this.form)) {this.form.action='AUS_SCHEDULE.main_display1';this.form.boption.value='CLoad';submit()}">
+<BR>
+<BR>
+<script>
+function search_text(form) 
+       {
+        var i=0;
+        var j=0;
+        var ans;
+
+
+	       if (form.elements[3].value=="" ||form.elements[3].value=="Enter Keywords or Course Code") 
+			      {
+         	   alert("Please enter keywords.");form.elements[3].value="Enter Keywords or Course Code";
+		         return; 
+            } form.elements[1].value=""; return true;
+      } 
+     
+</script>
+<table  align=left border=1 cellspacing=0 cellpadding=0>
+<td  bgcolor="#BCBCC8" style="font-size: 8pt">
+<INPUT style="font-size: 8pt" TYPE="text" Name="r_subj_code" SIZE="50"  value="Enter Keywords or Course Code" onfocus="if (this.value == 'Enter Keywords or Course Code') {this.value = '';}">
+<br />
+<INPUT style="font-size: 8pt" TYPE="radio" Name="r_search_type" VALUE="F" CHECKED>
+<b>Full</b>
+<INPUT style="font-size: 8pt" TYPE="radio" Name="r_search_type" VALUE="P">
+<b>Part Time</b>
+<INPUT style="font-size: 8pt" TYPE="button" VALUE="Search" OnClick="if (search_text(this.form)) {this.form.action='AUS_SCHEDULE.main_display1';this.form.boption.value='Search';submit()}">
+</td>
+</table>
+</td>
+<td>
+<b><font color=#000080>Instructions :</FONT></B>
+<BR>
+<font color=#000080>From the drop-down list of Programme/Study Year, select an option and <BR>click on <b>Load Class Schedule</B> or enter Course Code to search.</FONT>
+<BR>
+<BR>
+<b><font color=#000080>Attention :</FONT></B>
+<BR>
+Core, GER Core and major Prescribed Elective (PE) courses are listed together under the respective programme in the class schedule.
+<BR>
+<BR>
+Students who intend to register course HW0310, please note that the following index numbers are allotted for the programmes indicated: 
+<br />
+<table  border=0 cellspacing=0 cellpadding=0>
+<tr><td><U>Index Number Series</U>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+<td><U>Programme</U></td></tr>
+<tr><td>10xxx</td>
+<td>CE/CSC</td></tr>
+<tr><td>15xxx</td>
+<td>MAT/MTEC</td></tr>
+<tr><td>23xxx</td>
+<td>ME/AERO/MEEC/ASEC</td></tr>
+<tr><td>28xxx</td>
+<td>CEE/CVEC</td></tr>
+<tr><td>29xxx</td>
+<td>ENE/ENEC</td></tr>
+<tr><td>34xxx</td>
+<td>EEE/EEEC</td></tr>
+<tr><td>35xxx</td>
+<td>IEM/IEEC</td></tr>
+<tr><td>55xxx</td>
+<td>BIE</td></tr>
+<tr><td>58xxx</td>
+<td>CBE/CBEC</td></tr>
+<tr><td>62xxx</td>
+<td>MS/MSB</td></tr>
+</table>
+</td>
+</table>
+<input type="hidden" name="boption" value="" />
+<input type="hidden" name="acadsem" value="2018;1" />
+<input type="hidden" name="staff_access" value="false" />
+<div id=ui_footer_container>
+<p id=ui_footer_left> &copy; 2001-2018 Nanyang Technological University</p>
+<p id=ui_footer_right>
+&nbsp;
+<a class="ui_footer_container" href="javascript:self.close()" onmouseover="window.status='Exit and close window'; return true;" onmouseout="window.status='';return true;"  >Close</a>
+</p>
+</div>
+</div>
+</BODY></HTML>
