@@ -6,19 +6,10 @@ import (
 	"os"
 )
 
-func addWork(fetcher crawler.Fetcher, url string, resultChannel chan *crawler.FetcherResult) {
-	fmt.Printf("Fetching %s\n", url)
-	result, err := fetcher.Fetch(url)
-	if err != nil {
-		fmt.Println("Failed to fetch")
-	}
-	resultChannel <- &result
-}
-
 func main() {
 	parser := crawler.NewParser()
 
-	file, err := os.Open("data/main")
+	file, err := os.Open("testdata/main")
 	defer file.Close()
 
 	acadSem, err := parser.FindLatestAcadSem(file)

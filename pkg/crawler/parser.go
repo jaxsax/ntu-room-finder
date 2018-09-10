@@ -12,10 +12,13 @@ type Parser interface {
 	Parse(body io.Reader) (result ParserResult, err error)
 }
 
-type ParserResult struct {
+type AcademicSemester struct {
+	Key, Text string
 }
 
-type DefaultParser struct{}
+func (a *AcademicSemester) Equal(b *AcademicSemester) bool {
+	return a.Key == b.Key
+}
 
 type AcademicSemester struct {
 	Key, Text string
@@ -110,29 +113,4 @@ func FindAttribute(attrs []html.Attribute, attr string) (string, error) {
 		}
 	}
 	return "", ErrCantFindAttribute
-}
-
-func FindHref(attrs []html.Attribute) (string, error) {
-	return FindAttribute(attrs, "href")
-}
-
-func (p *DefaultParser) Parse(body io.Reader) (*ParserResult, error) {
-	z := html.NewTokenizer(body)
-	for {
-		tt := z.Next()
-		switch {
-		case tt == html.ErrorToken:
-			return &ParserResult{}, nil
-		case tt == html.StartTagToken:
-			t := z.Token()
-
-			isAnchor := t.Data == "a"
-			if isAnchor {
-				href, err := FindHref(t.Attr)
-				if err == nil {
-					fmt.Printf("(%s) link: %s\n", t.Data, href)
-				}
-			}
-		}
-	}
 }
