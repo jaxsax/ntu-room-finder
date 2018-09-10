@@ -64,3 +64,45 @@ func TestAcadSem(t *testing.T) {
 		}
 	}
 }
+
+func TestCourses(t *testing.T) {
+	cases := []struct {
+		body           io.Reader
+		expectedLength int
+		expectedErr    error
+	}{
+		{strings.NewReader(``), 0, nil},
+		{strings.NewReader(`
+            <select name=r_course_yr>
+                <option value=1>Course 1</option>
+            </select>`),
+			1,
+			nil},
+		{strings.NewReader(`
+            <select name=r_course_yr>
+                <option value=1>Course 1</option>
+                <option value=1>Course 1</option>
+                <option value=1>Course 1</option>
+            </select>`),
+			3,
+			nil},
+		{strings.NewReader(`
+            <select name=r_course_yr>
+                <option value>select something</option>
+                <option value=1>Course 1</option>
+            </select>`),
+			1,
+			nil},
+	}
+
+	for i, test := range cases {
+		parser := crawler.NewParser()
+		result, err := parser.FindCourses(test.body)
+		if len(result) != test.expectedLength {
+			t.Errorf("id=%d expected_length=%d got=%d", i, test.expectedLength, len(result))
+		}
+		if err != test.expectedErr {
+			t.Errorf("id=%d expected=%s got=%s", i, test.expectedErr, err)
+		}
+	}
+}

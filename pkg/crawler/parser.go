@@ -2,15 +2,13 @@ package crawler
 
 import (
 	"errors"
-	"fmt"
 	"golang.org/x/net/html"
 	"golang.org/x/net/html/atom"
 	"io"
+	"strings"
 )
 
-type Parser interface {
-	Parse(body io.Reader) (result ParserResult, err error)
-}
+type DefaultParser struct{}
 
 type AcademicSemester struct {
 	Key, Text string
@@ -20,7 +18,7 @@ func (a *AcademicSemester) Equal(b *AcademicSemester) bool {
 	return a.Key == b.Key
 }
 
-type AcademicSemester struct {
+type Course struct {
 	Key, Text string
 }
 
@@ -36,6 +34,7 @@ var (
 
 const (
 	AcadSemNameKey = "acadsem"
+	CoursesNameKey = "r_course_yr"
 )
 
 func TraverseNodes(doc *html.Node, matcher func(*html.Node) (bool, bool)) (nodes []*html.Node) {
@@ -104,6 +103,56 @@ func (p *DefaultParser) FindLatestAcadSem(body io.Reader) (*AcademicSemester, er
 		}
 	}
 	return &AcademicSemester{}, ErrCantFindAcadSem
+}
+
+func (p *DefaultParser) FindCourses(body io.Reader) ([]Course, error) {
+	courses := make([]Course, 0)
+
+	doc, err := html.Parse(body)
+	if err != nil {
+		return courses, err
+	}
+
+	matcher := func(n *html.Node) (keep bool, exit bool) {
+		isSelect := n.Type == html.ElementNode && n.DataAtom == atom.Select
+		name, err := FindAttribute(n.Attr, "name")
+
+		keep = isSelect && err == nil && name == CoursesNameKey
+		return
+	}
+	optionMatcher := func(n *html.Node) (keep bool, exit bool) {
+		isOption := n.Type == html.ElementNode && n.DataAtom == atom.Option
+
+		value, err := FindAttribute(n.Attr, "value")
+		if err != nil {
+			keep = false
+			return
+		}
+
+		isValueEmpty := len(strings.TrimSpace(value)) == 0
+		keep = isOption && !isValueEmpty
+
+		return
+	}
+
+	selectNodes := TraverseNodes(doc, matcher)
+	for _, node := range selectNodes {
+		optionNodes := TraverseNodes(node, optionMatcher)
+		for _, node := range optionNodes {
+			text := node.FirstChild.Data
+			key, err := FindAttribute(node.Attr, "value")
+			if err != nil {
+				return courses, ErrCantFindAttribute
+			}
+
+			courses = append(courses, Course{
+				Key:  key,
+				Text: text,
+			})
+		}
+	}
+
+	return courses, nil
 }
 
 func FindAttribute(attrs []html.Attribute, attr string) (string, error) {
