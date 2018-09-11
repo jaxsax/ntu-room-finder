@@ -1,8 +1,8 @@
-package crawler_test
+package parser_test
 
 import (
 	"fmt"
-	"github.com/jaxsax/ntu-room-finder/pkg/crawler"
+	"github.com/jaxsax/ntu-room-finder/pkg/parser"
 	"io"
 	"os"
 	"strings"
@@ -20,12 +20,12 @@ func GetAcadSemFixture() io.Reader {
 func TestAcadSem(t *testing.T) {
 	cases := []struct {
 		body        io.Reader
-		expected    crawler.AcademicSemester
+		expected    parser.AcademicSemester
 		expectedErr error
 	}{
-		{strings.NewReader(``), crawler.AcademicSemester{}, crawler.ErrCantFindAcadSem},
+		{strings.NewReader(``), parser.AcademicSemester{}, parser.ErrCantFindAcadSem},
 		{strings.NewReader(`<select name=acadsem><option selected value=a>Hello</option></select>`),
-			crawler.AcademicSemester{
+			parser.AcademicSemester{
 				Key:  "a",
 				Text: "Hello",
 			},
@@ -35,26 +35,26 @@ func TestAcadSem(t *testing.T) {
                 <option selected value=a>Hello</option>
                 <option selected value=b>Hello1</option>
             </select>`),
-			crawler.AcademicSemester{
+			parser.AcademicSemester{
 				Key:  "a",
 				Text: "Hello",
 			},
 			nil},
 		{strings.NewReader(`<select name=acadsem><option value=a>Hello</option></select>`),
-			crawler.AcademicSemester{},
-			crawler.ErrCantFindAcadSem},
+			parser.AcademicSemester{},
+			parser.ErrCantFindAcadSem},
 		{strings.NewReader(`<select name=acadsem></select>`),
-			crawler.AcademicSemester{},
-			crawler.ErrCantFindAcadSem},
+			parser.AcademicSemester{},
+			parser.ErrCantFindAcadSem},
 		{GetAcadSemFixture(),
-			crawler.AcademicSemester{
+			parser.AcademicSemester{
 				Key:  "2018;1",
 				Text: "Acad Yr 2018 Semester 1",
 			}, nil},
 	}
 
 	for i, test := range cases {
-		parser := crawler.NewParser()
+		parser := parser.NewParser()
 		result, err := parser.FindLatestAcadSem(test.body)
 		if !result.Equal(&test.expected) {
 			t.Errorf("id=%d expected=%q got=%q", i, test.expected, result)
@@ -96,7 +96,7 @@ func TestCourses(t *testing.T) {
 	}
 
 	for i, test := range cases {
-		parser := crawler.NewParser()
+		parser := parser.NewParser()
 		result, err := parser.FindCourses(test.body)
 		if len(result) != test.expectedLength {
 			t.Errorf("id=%d expected_length=%d got=%d", i, test.expectedLength, len(result))
