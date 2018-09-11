@@ -1,9 +1,10 @@
 PACKAGE_SOURCES=$(wildcard pkg/**/*)
+INTERNAL_SOURCES=$(wildcard internal/*)
 
 .PHONY: default
 default: bin/crawl
 
-bin/crawl: $(wildcard cmd/**/*) $(PACKAGE_SOURCES)
+bin/crawl: $(wildcard cmd/**/*) $(PACKAGE_SOURCES) $(INTERNAL_SOURCES)
 	go install ./...
 
 .PHONY: run/crawler
