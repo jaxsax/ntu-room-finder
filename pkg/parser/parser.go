@@ -2,9 +2,11 @@ package parser
 
 import (
 	"errors"
+	"fmt"
 	"golang.org/x/net/html"
 	"golang.org/x/net/html/atom"
 	"io"
+	"strconv"
 	"strings"
 )
 
@@ -18,6 +20,23 @@ type Course struct {
 	Key, Text string
 }
 
+type Subject struct {
+	Id    string
+	Title string
+	AuRaw string
+	Au    float32
+}
+
+type Schedule struct {
+	Index    string
+	Type     string
+	Group    int
+	Day      string
+	TimeText string
+	Venue    string
+	Remark   string
+}
+
 func (a *AcademicSemester) Equal(b *AcademicSemester) bool {
 	return a.Key == b.Key
 }
@@ -27,9 +46,10 @@ func NewParser() *DefaultParser {
 }
 
 var (
-	ErrInvalidToken      = errors.New("parser: invalid token")
-	ErrCantFindAttribute = errors.New("parser: cannot find attribute")
-	ErrCantFindAcadSem   = errors.New("parser: cannot find academic semester")
+	ErrInvalidToken          = errors.New("parser: invalid token")
+	ErrCantFindAttribute     = errors.New("parser: cannot find attribute")
+	ErrCantFindAcadSem       = errors.New("parser: cannot find academic semester")
+	ErrCantFindScheduleTable = errors.New("parser: cannot find tables matching schedule signature")
 )
 
 const (
@@ -144,6 +164,89 @@ func (p *DefaultParser) FindCourses(body io.Reader) ([]Course, error) {
 	}
 
 	return courses, nil
+}
+
+func (p *DefaultParser) FindSchedule(body io.Reader) ([]Schedule, error) {
+	doc, err := html.Parse(body)
+	if err != nil {
+		return nil, err
+	}
+
+	headerMatcher := func(n *html.Node) (keep bool, exit bool) {
+		isHeader := n.Type == html.ElementNode && n.DataAtom == atom.Th
+		keep = isHeader
+
+		return
+	}
+
+	lessonMatcher := func(n *html.Node) (keep bool, exit bool) {
+		isTable := n.Type == html.ElementNode && n.DataAtom == atom.Table
+
+		headerSequence := []string{"INDEX", "TYPE", "GROUP", "DAY", "TIME", "VENUE", "REMARK"}
+		headers := TraverseNodes(n, headerMatcher)
+
+		var matches bool = true
+		for i, header := range headers {
+			headerText := header.FirstChild.FirstChild.Data
+			if headerText != headerSequence[i] {
+				matches = false
+			}
+		}
+		keep = isTable && matches
+		return
+	}
+
+	trMatcher := func(n *html.Node) (keep bool, exit bool) {
+		isTr := n.Type == html.ElementNode && n.DataAtom == atom.Tr
+
+		keep = isTr
+		return
+	}
+
+	schedules := make([]Schedule, 0)
+	lessonTable := TraverseNodes(doc, lessonMatcher)
+	for _, subject := range lessonTable {
+		rows := TraverseNodes(subject, trMatcher)
+		dataRows := rows[1:]
+
+		index := dataRows[0].FirstChild.NextSibling.FirstChild.FirstChild.Data
+		for _, row := range dataRows {
+			var schedule Schedule
+			schedule.Index = index
+			for i, td := 1, row.FirstChild.NextSibling.NextSibling.NextSibling; td != nil; i, td = i+1, td.NextSibling.NextSibling {
+				node := td.FirstChild.FirstChild
+				var text string
+				if node != nil {
+					text = node.Data
+				}
+				switch i {
+				case 1:
+					schedule.Type = text
+					break
+				case 2:
+					groupAsInt, _ := strconv.Atoi(text)
+					schedule.Group = groupAsInt
+					break
+				case 3:
+					schedule.Day = text
+					break
+				case 4:
+					schedule.TimeText = text
+					break
+				case 5:
+					schedule.Venue = text
+					break
+				case 6:
+					schedule.Remark = text
+					break
+				default:
+					fmt.Printf("unhandled index: %d\n", i)
+				}
+			}
+			schedules = append(schedules, schedule)
+		}
+	}
+	return schedules, nil
 }
 
 func FindAttribute(attrs []html.Attribute, attr string) (string, error) {

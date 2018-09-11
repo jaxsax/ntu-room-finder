@@ -17,6 +17,14 @@ func GetAcadSemFixture() io.Reader {
 	return f
 }
 
+func GetSingleScheduleFixture() io.Reader {
+	f, err := os.Open("../../testdata/acc-y1-single-lesson.html")
+	if err != nil {
+		fmt.Println("cant find testdata/acc-y1-single-lesson")
+	}
+	return f
+}
+
 func TestAcadSem(t *testing.T) {
 	cases := []struct {
 		body        io.Reader
@@ -100,6 +108,43 @@ func TestCourses(t *testing.T) {
 		result, err := parser.FindCourses(test.body)
 		if len(result) != test.expectedLength {
 			t.Errorf("id=%d expected_length=%d got=%d", i, test.expectedLength, len(result))
+		}
+		if err != test.expectedErr {
+			t.Errorf("id=%d expected=%s got=%s", i, test.expectedErr, err)
+		}
+	}
+}
+
+func TestSchedule(t *testing.T) {
+	cases := []struct {
+		body        io.Reader
+		expected    []parser.Schedule
+		expectedErr error
+	}{
+		{GetSingleScheduleFixture(),
+			[]parser.Schedule{
+				parser.Schedule{
+					Index: "00810", Type: "LEC/STUDIO", Group: 1,
+					Day: "WED", TimeText: "1830-2130", Venue: "LT1A", Remark: "Teaching Wk11",
+				},
+				parser.Schedule{
+					Index: "00810", Type: "LEC/STUDIO", Group: 1,
+					Day: "WED", TimeText: "1830-2130", Venue: "LT2A", Remark: "Teaching Wk11",
+				},
+				parser.Schedule{
+					Index: "00810", Type: "SEM", Group: 1,
+					Day: "THU", TimeText: "0830-1030", Venue: "S4-CL1", Remark: "",
+				},
+			},
+			nil},
+	}
+
+	for i, test := range cases {
+		parser := parser.NewParser()
+		result, err := parser.FindSchedule(test.body)
+		t.Logf("%#v", result)
+		if len(result) != len(test.expected) {
+			t.Errorf("id=%d expected_length=%d got=%d", i, len(test.expected), len(result))
 		}
 		if err != test.expectedErr {
 			t.Errorf("id=%d expected=%s got=%s", i, test.expectedErr, err)
