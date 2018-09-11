@@ -185,11 +185,11 @@ func (p *DefaultParser) FindSchedule(body io.Reader) ([]Schedule, error) {
 		headerSequence := []string{"INDEX", "TYPE", "GROUP", "DAY", "TIME", "VENUE", "REMARK"}
 		headers := TraverseNodes(n, headerMatcher)
 
-		var matches bool = true
+		var matches bool = false
 		for i, header := range headers {
 			headerText := header.FirstChild.FirstChild.Data
-			if headerText != headerSequence[i] {
-				matches = false
+			if headerText == headerSequence[i%len(headerSequence)] {
+				matches = true
 			}
 		}
 		keep = isTable && matches
@@ -209,17 +209,22 @@ func (p *DefaultParser) FindSchedule(body io.Reader) ([]Schedule, error) {
 		rows := TraverseNodes(subject, trMatcher)
 		dataRows := rows[1:]
 
-		index := dataRows[0].FirstChild.NextSibling.FirstChild.FirstChild.Data
+		var cachedIndex string
 		for _, row := range dataRows {
 			var schedule Schedule
-			schedule.Index = index
-			for i, td := 1, row.FirstChild.NextSibling.NextSibling.NextSibling; td != nil; i, td = i+1, td.NextSibling.NextSibling {
+			for i, td := 0, row.FirstChild.NextSibling; td != nil; i, td = i+1, td.NextSibling.NextSibling {
 				node := td.FirstChild.FirstChild
 				var text string
 				if node != nil {
 					text = node.Data
 				}
 				switch i {
+				case 0:
+					if node != nil {
+						cachedIndex = text
+					}
+					schedule.Index = cachedIndex
+					break
 				case 1:
 					schedule.Type = text
 					break

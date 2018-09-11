@@ -2,9 +2,9 @@ package internal
 
 import (
 	"bytes"
+	"encoding/json"
 	"fmt"
 	"github.com/jaxsax/ntu-room-finder/pkg/parser"
-	"io"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -70,7 +70,13 @@ func buildCourseInformation(s parser.AcademicSemester, c parser.Course) courseWi
 
 }
 
-func crawlCourse(in chan courseWithSemester, out chan int, sync chan time.Time) {
+type crawlResult struct {
+	c      courseWithSemester
+	result []parser.Schedule
+}
+
+func crawlCourse(in chan courseWithSemester, out chan crawlResult,
+	sync chan time.Time, p *parser.DefaultParser) {
 	for {
 		c := <-in
 		log.Printf("Processing course %s\n", c.Mixed())
@@ -98,20 +104,13 @@ func crawlCourse(in chan courseWithSemester, out chan int, sync chan time.Time) 
 		}
 		defer res.Body.Close()
 
-		f, err := os.Create(fmt.Sprintf("/tmp/test/%s", c.course.Key))
+		schedules, err := p.FindSchedule(res.Body)
 		if err != nil {
-			log.Printf("failed to create file for %v (%s)\n", c, err)
+			log.Printf("failed to parse body for %v (%s)\n", c, err)
+			continue
 		}
 
-		buffer := make([]byte, 32)
-		for {
-			n, err := res.Body.Read(buffer)
-			if err == io.EOF {
-				break
-			}
-			f.Write(buffer[:n])
-		}
-		out <- 1
+		out <- crawlResult{c: c, result: schedules}
 	}
 }
 
@@ -139,17 +138,28 @@ func Parse() {
 	}
 
 	courseQueue := make(chan courseWithSemester, len(courses))
-	coursesOut := make(chan int, len(courses))
+	coursesOut := make(chan crawlResult, len(courses))
 	delay := 5 * time.Second
 	sync := make(chan time.Time, 1)
 	sync <- time.Now()
 
 	go addCourses(courses, acadSem, courseQueue, sync)
-	go crawlCourse(courseQueue, coursesOut, sync)
+	go crawlCourse(courseQueue, coursesOut, sync, parse)
 
 	for i := 0; i < len(courses); i++ {
-		courseOut := <-coursesOut
-		log.Printf("finished: %d\n", courseOut)
+		crawlResult := <-coursesOut
+		fileName := fmt.Sprintf("/tmp/%s", crawlResult.c.course.Key)
+		f, err := os.Create(fileName)
+		if err != nil {
+			log.Printf("failed to write json %s", err)
+			continue
+		}
+
+		log.Printf("writing to %s\n", fileName)
+		err = json.NewEncoder(f).Encode(crawlResult.result)
+		if err != nil {
+			log.Println(err)
+		}
 
 		nextCrawl := time.Now().Add(delay)
 		log.Printf("next crawl: %s\n", nextCrawl.Format(time.RFC3339))

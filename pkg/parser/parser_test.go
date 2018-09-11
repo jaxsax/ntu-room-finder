@@ -9,6 +9,14 @@ import (
 	"testing"
 )
 
+func GetFileReader(name string) io.Reader {
+	f, err := os.Open(name)
+	if err != nil {
+		fmt.Printf("cant find %s\n", name)
+	}
+	return f
+}
+
 func GetAcadSemFixture() io.Reader {
 	f, err := os.Open("../../testdata/main")
 	if err != nil {
@@ -137,12 +145,18 @@ func TestSchedule(t *testing.T) {
 				},
 			},
 			nil},
+		{GetFileReader("../../testdata/schedule-with-subject.html"),
+			[]parser.Schedule{
+				parser.Schedule{
+					Index: "00731", Type: "LEC/STUDIO", Group: 1,
+					Day: "TUE", TimeText: "1830-2130", Venue: "LT26", Remark: "Teaching Wk11",
+				},
+			}, nil},
 	}
 
 	for i, test := range cases {
 		parser := parser.NewParser()
 		result, err := parser.FindSchedule(test.body)
-		t.Logf("%#v", result)
 		if len(result) != len(test.expected) {
 			t.Errorf("id=%d expected_length=%d got=%d", i, len(test.expected), len(result))
 		}
