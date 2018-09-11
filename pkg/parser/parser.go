@@ -14,12 +14,12 @@ type AcademicSemester struct {
 	Key, Text string
 }
 
-func (a *AcademicSemester) Equal(b *AcademicSemester) bool {
-	return a.Key == b.Key
-}
-
 type Course struct {
 	Key, Text string
+}
+
+func (a *AcademicSemester) Equal(b *AcademicSemester) bool {
+	return a.Key == b.Key
 }
 
 func NewParser() *DefaultParser {
@@ -56,50 +56,53 @@ func TraverseNodes(doc *html.Node, matcher func(*html.Node) (bool, bool)) (nodes
 	return nodes
 }
 
+func isSelect(n *html.Node) bool {
+	return n.Type == html.ElementNode && n.DataAtom == atom.Select
+}
+
+func isOption(n *html.Node) bool {
+	return n.Type == html.ElementNode && n.DataAtom == atom.Option
+}
+
+func selectMatcher(nameAttr string) func(n *html.Node) (keep bool, exit bool) {
+	return func(n *html.Node) (keep bool, exit bool) {
+		name, err := FindAttribute(n.Attr, "name")
+		isCorrectName := err == nil && name == nameAttr
+
+		keep = isSelect(n) && isCorrectName
+		return
+	}
+}
+
 func (p *DefaultParser) FindLatestAcadSem(body io.Reader) (*AcademicSemester, error) {
 	doc, err := html.Parse(body)
 	if err != nil {
 		return &AcademicSemester{}, err
 	}
 
-	matcher := func(n *html.Node) (keep bool, exit bool) {
-		if n.Type == html.ElementNode && n.DataAtom == atom.Select {
-			keep = true
-			exit = true
-		}
+	optionMatcher := func(n *html.Node) (keep bool, exit bool) {
+		_, err := FindAttribute(n.Attr, "selected")
+		keep = isOption(n) && err == nil
+
 		return
 	}
 
-	selectNodes := TraverseNodes(doc, matcher)
+	selectNodes := TraverseNodes(doc, selectMatcher(AcadSemNameKey))
 	for _, node := range selectNodes {
-		name, err := FindAttribute(node.Attr, "name")
-		if err != nil {
-			continue
-		}
 
-		if name == AcadSemNameKey {
-			matcher := func(n *html.Node) (keep bool, exit bool) {
-				isOption := n.Type == html.ElementNode && n.DataAtom == atom.Option
-				_, err := FindAttribute(n.Attr, "selected")
+		optionNodes := TraverseNodes(node, optionMatcher)
+		for _, node := range optionNodes {
 
-				keep = isOption && err == nil
-				return
+			text := node.FirstChild.Data
+			value, err := FindAttribute(node.Attr, "value")
+			if err != nil {
+				return &AcademicSemester{}, err
 			}
 
-			optionNodes := TraverseNodes(doc, matcher)
-			for _, node := range optionNodes {
-
-				text := node.FirstChild.Data
-				value, err := FindAttribute(node.Attr, "value")
-				if err != nil {
-					return &AcademicSemester{}, err
-				}
-
-				return &AcademicSemester{
-					Key:  value,
-					Text: text,
-				}, nil
-			}
+			return &AcademicSemester{
+				Key:  value,
+				Text: text,
+			}, nil
 		}
 	}
 	return &AcademicSemester{}, ErrCantFindAcadSem
@@ -113,29 +116,17 @@ func (p *DefaultParser) FindCourses(body io.Reader) ([]Course, error) {
 		return courses, err
 	}
 
-	matcher := func(n *html.Node) (keep bool, exit bool) {
-		isSelect := n.Type == html.ElementNode && n.DataAtom == atom.Select
-		name, err := FindAttribute(n.Attr, "name")
-
-		keep = isSelect && err == nil && name == CoursesNameKey
-		return
-	}
 	optionMatcher := func(n *html.Node) (keep bool, exit bool) {
 		isOption := n.Type == html.ElementNode && n.DataAtom == atom.Option
-
 		value, err := FindAttribute(n.Attr, "value")
-		if err != nil {
-			keep = false
-			return
-		}
 
-		isValueEmpty := len(strings.TrimSpace(value)) == 0
+		isValueEmpty := err == nil && len(strings.TrimSpace(value)) == 0
 		keep = isOption && !isValueEmpty
 
 		return
 	}
 
-	selectNodes := TraverseNodes(doc, matcher)
+	selectNodes := TraverseNodes(doc, selectMatcher(CoursesNameKey))
 	for _, node := range selectNodes {
 		optionNodes := TraverseNodes(node, optionMatcher)
 		for _, node := range optionNodes {
