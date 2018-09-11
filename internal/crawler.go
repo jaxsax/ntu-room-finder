@@ -139,14 +139,21 @@ func Parse() {
 
 	courseQueue := make(chan courseWithSemester, len(courses))
 	coursesOut := make(chan crawlResult, len(courses))
-	delay := 5 * time.Second
 	sync := make(chan time.Time, 1)
+
+	delay := 5 * time.Second
 	sync <- time.Now()
 
 	go addCourses(courses, acadSem, courseQueue, sync)
 	go crawlCourse(courseQueue, coursesOut, sync, parse)
 
-	for i := 0; i < len(courses); i++ {
+	processParsedCourses(coursesOut, sync, len(courses), delay)
+}
+
+func processParsedCourses(coursesOut chan crawlResult, sync chan time.Time,
+	length int,
+	delay time.Duration) {
+	for i := 0; i < length; i++ {
 		crawlResult := <-coursesOut
 		fileName := fmt.Sprintf("/tmp/%s", crawlResult.c.course.Key)
 		f, err := os.Create(fileName)
