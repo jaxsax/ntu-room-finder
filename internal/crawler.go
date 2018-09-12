@@ -173,7 +173,7 @@ func Parse() {
 	sqlOut := make(chan []byte)
 	sync := make(chan time.Time, 1)
 
-	delay := 5 * time.Second
+	delay := 200 * time.Millisecond
 	sync <- time.Now()
 
 	go addCourses(courses, acadSem, courseQueue, sync)

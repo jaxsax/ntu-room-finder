@@ -7,7 +7,9 @@ import (
 	"golang.org/x/net/html/atom"
 	"hash/fnv"
 	"io"
+	"strconv"
 	"strings"
+	"time"
 )
 
 type DefaultParser struct{}
@@ -28,13 +30,15 @@ type Subject struct {
 }
 
 type Schedule struct {
-	Index    string
-	Type     string
-	Group    string
-	Day      string
-	TimeText string
-	Venue    string
-	Remark   string
+	Index     string
+	Type      string
+	Group     string
+	Day       string
+	Venue     string
+	Remark    string
+	TimeText  string
+	TimeStart time.Time
+	TimeEnd   time.Time
 }
 
 func (s *Schedule) Id() uint64 {
@@ -229,7 +233,7 @@ func (p *DefaultParser) FindSchedule(body io.Reader) ([]Schedule, error) {
 				node := td.FirstChild.FirstChild
 				var text string
 				if node != nil {
-					text = node.Data
+					text = strings.TrimSpace(node.Data)
 				}
 				switch i {
 				case 0:
@@ -249,6 +253,22 @@ func (p *DefaultParser) FindSchedule(body io.Reader) ([]Schedule, error) {
 					break
 				case 4:
 					schedule.TimeText = text
+					if len(schedule.TimeText) <= 0 {
+						break
+					}
+					timeText := strings.Split(schedule.TimeText, "-")
+					startHour, startMinute, err := splitTime(timeText[0])
+					if err != nil {
+						return schedules, err
+					}
+					schedule.TimeStart = time.Date(2018, 9, 12, startHour, startMinute, 0, 0, time.UTC)
+
+					endHour, endMinute, err := splitTime(timeText[1])
+					if err != nil {
+						return schedules, err
+					}
+					schedule.TimeEnd = time.Date(2018, 9, 12, endHour, endMinute, 0, 0, time.UTC)
+
 					break
 				case 5:
 					schedule.Venue = text
@@ -264,6 +284,20 @@ func (p *DefaultParser) FindSchedule(body io.Reader) ([]Schedule, error) {
 		}
 	}
 	return schedules, nil
+}
+
+// Splits time from a 24 hour format into hours and minutes
+// EG: 1600 -> 16 00
+func splitTime(s string) (int, int, error) {
+	hourPart, err := strconv.Atoi(s[:2])
+	if err != nil {
+		return 0, 0, err
+	}
+	minutePart, err := strconv.Atoi(s[2:])
+	if err != nil {
+		return 0, 0, err
+	}
+	return hourPart, minutePart, nil
 }
 
 func FindAttribute(attrs []html.Attribute, attr string) (string, error) {
