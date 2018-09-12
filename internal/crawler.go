@@ -170,7 +170,7 @@ func Parse() {
 
 	courseQueue := make(chan courseWithSemester, len(courses))
 	coursesOut := make(chan crawlResult, len(courses))
-	sqlOut := make(chan string)
+	sqlOut := make(chan []byte)
 	sync := make(chan time.Time, 1)
 
 	delay := 5 * time.Second
@@ -183,14 +183,15 @@ func Parse() {
 	processParsedCourses(coursesOut, sync, len(courses), delay, sqlOut)
 }
 
-func sqlCombiner(in chan string, outputFile *os.File) {
+func sqlCombiner(in chan []byte, outputFile *os.File) {
 	for {
 		generatedSQL := <-in
-		outputFile.Write([]byte(generatedSQL))
+		log.Printf("ingested an item, there are %d items", len(in))
+		outputFile.Write(generatedSQL)
 	}
 }
 
-func generateSQLForParsed(result crawlResult, sqlOut chan string) {
+func generateSQLForParsed(result crawlResult, sqlOut chan []byte) {
 	log.Println("dispatch generate sql")
 	generatedSQL := schedule.GenerateSQL(&result.c.course, result.result)
 	sqlOut <- generatedSQL
@@ -198,7 +199,7 @@ func generateSQLForParsed(result crawlResult, sqlOut chan string) {
 
 func processParsedCourses(coursesOut chan crawlResult, sync chan time.Time,
 	length int, delay time.Duration,
-	sqlOut chan string) {
+	sqlOut chan []byte) {
 	for i := 0; i < length; i++ {
 		crawlResult := <-coursesOut
 
