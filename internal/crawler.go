@@ -222,6 +222,9 @@ func addCourses(courses []parser.Course, acadSem *parser.AcademicSemester,
 		select {
 		case <-time.After(time.Until(nextCrawl)):
 			in <- buildCourseInformation(*acadSem, course)
+		case <-time.After(time.Duration(10 * time.Second)):
+			log.Println("appears to be stuck, kicking the courses again")
+			in <- buildCourseInformation(*acadSem, course)
 		}
 	}
 }
