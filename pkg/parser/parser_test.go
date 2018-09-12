@@ -132,15 +132,15 @@ func TestSchedule(t *testing.T) {
 		{GetSingleScheduleFixture(),
 			[]parser.Schedule{
 				parser.Schedule{
-					Index: "00810", Type: "LEC/STUDIO", Group: 1,
+					Index: "00810", Type: "LEC/STUDIO", Group: "1",
 					Day: "WED", TimeText: "1830-2130", Venue: "LT1A", Remark: "Teaching Wk11",
 				},
 				parser.Schedule{
-					Index: "00810", Type: "LEC/STUDIO", Group: 1,
+					Index: "00810", Type: "LEC/STUDIO", Group: "1",
 					Day: "WED", TimeText: "1830-2130", Venue: "LT2A", Remark: "Teaching Wk11",
 				},
 				parser.Schedule{
-					Index: "00810", Type: "SEM", Group: 1,
+					Index: "00810", Type: "SEM", Group: "1",
 					Day: "THU", TimeText: "0830-1030", Venue: "S4-CL1", Remark: "",
 				},
 			},
@@ -148,7 +148,7 @@ func TestSchedule(t *testing.T) {
 		{GetFileReader("../../testdata/schedule-with-subject.html"),
 			[]parser.Schedule{
 				parser.Schedule{
-					Index: "00731", Type: "LEC/STUDIO", Group: 1,
+					Index: "00731", Type: "LEC/STUDIO", Group: "1",
 					Day: "TUE", TimeText: "1830-2130", Venue: "LT26", Remark: "Teaching Wk11",
 				},
 			}, nil},

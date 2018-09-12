@@ -2,8 +2,8 @@ package internal
 
 import (
 	"bytes"
-	"encoding/json"
 	"fmt"
+	"github.com/jaxsax/ntu-room-finder/internal/schedule"
 	"github.com/jaxsax/ntu-room-finder/pkg/parser"
 	"io/ioutil"
 	"log"
@@ -117,7 +117,38 @@ func crawlCourse(in chan courseWithSemester, out chan crawlResult,
 func Parse() {
 	go sigInt()
 
+	outputFileName := "out.sql"
+	var outputFile *os.File
 	parse := parser.NewParser()
+
+	if _, err := os.Stat(outputFileName); os.IsExist(err) {
+		outputFile, err = os.OpenFile(outputFileName, os.O_APPEND|os.O_WRONLY, 0600)
+		if err != nil {
+			log.Fatalf("failed to truncate %s %v", outputFileName, err)
+			return
+		}
+		outputFile.Truncate(0)
+		outputFile.Seek(0, 0)
+	} else {
+		outputFile, err = os.Create(outputFileName)
+		if err != nil {
+			log.Fatalf("failed to create %s for writing %v", outputFileName, err)
+		}
+	}
+
+	defer outputFile.Close()
+
+	initSQL, err := ioutil.ReadFile("sql/init.sql")
+	if err != nil {
+		log.Fatalf("failed to read sql/init.sql %v", err)
+		return
+	}
+
+	_, err = outputFile.Write(initSQL)
+	if err != nil {
+		log.Fatalf("failed to write initializing sql %v", err)
+		return
+	}
 
 	mainBody, err := getMainBody()
 	if err != nil {
@@ -139,6 +170,7 @@ func Parse() {
 
 	courseQueue := make(chan courseWithSemester, len(courses))
 	coursesOut := make(chan crawlResult, len(courses))
+	sqlOut := make(chan string)
 	sync := make(chan time.Time, 1)
 
 	delay := 5 * time.Second
@@ -146,31 +178,38 @@ func Parse() {
 
 	go addCourses(courses, acadSem, courseQueue, sync)
 	go crawlCourse(courseQueue, coursesOut, sync, parse)
+	go sqlCombiner(sqlOut, outputFile)
 
-	processParsedCourses(coursesOut, sync, len(courses), delay)
+	processParsedCourses(coursesOut, sync, len(courses), delay, sqlOut)
+}
+
+func sqlCombiner(in chan string, outputFile *os.File) {
+	for {
+		generatedSQL := <-in
+		outputFile.Write([]byte(generatedSQL))
+	}
+}
+
+func generateSQLForParsed(result crawlResult, sqlOut chan string) {
+	log.Println("dispatch generate sql")
+	generatedSQL := schedule.GenerateSQL(&result.c.course, result.result)
+	sqlOut <- generatedSQL
 }
 
 func processParsedCourses(coursesOut chan crawlResult, sync chan time.Time,
-	length int,
-	delay time.Duration) {
+	length int, delay time.Duration,
+	sqlOut chan string) {
 	for i := 0; i < length; i++ {
 		crawlResult := <-coursesOut
-		fileName := fmt.Sprintf("/tmp/%s", crawlResult.c.course.Key)
-		f, err := os.Create(fileName)
-		if err != nil {
-			log.Printf("failed to write json %s", err)
-			continue
-		}
 
-		log.Printf("writing to %s\n", fileName)
-		err = json.NewEncoder(f).Encode(crawlResult.result)
-		if err != nil {
-			log.Println(err)
-		}
+		log.Printf("%d/%d", i+1, length)
 
 		nextCrawl := time.Now().Add(delay)
 		log.Printf("next crawl: %s\n", nextCrawl.Format(time.RFC3339))
 		sync <- nextCrawl
+
+		log.Println("dispatching worker for generating sql")
+		go generateSQLForParsed(crawlResult, sqlOut)
 	}
 }
 

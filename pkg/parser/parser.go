@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"golang.org/x/net/html"
 	"golang.org/x/net/html/atom"
+	"hash/fnv"
 	"io"
-	"strconv"
 	"strings"
 )
 
@@ -30,11 +30,24 @@ type Subject struct {
 type Schedule struct {
 	Index    string
 	Type     string
-	Group    int
+	Group    string
 	Day      string
 	TimeText string
 	Venue    string
 	Remark   string
+}
+
+func (s *Schedule) Id() uint64 {
+	hasher := fnv.New64()
+
+	hasher.Write([]byte(s.Index))
+	hasher.Write([]byte(s.Type))
+	hasher.Write([]byte(s.Group))
+	hasher.Write([]byte(s.Day))
+	hasher.Write([]byte(s.TimeText))
+	hasher.Write([]byte(s.Venue))
+
+	return hasher.Sum64()
 }
 
 func (a *AcademicSemester) Equal(b *AcademicSemester) bool {
@@ -229,8 +242,7 @@ func (p *DefaultParser) FindSchedule(body io.Reader) ([]Schedule, error) {
 					schedule.Type = text
 					break
 				case 2:
-					groupAsInt, _ := strconv.Atoi(text)
-					schedule.Group = groupAsInt
+					schedule.Group = text
 					break
 				case 3:
 					schedule.Day = text
