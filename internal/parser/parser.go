@@ -145,11 +145,11 @@ func getCoursesToParse(pathToMapping string) ([]downloader.CourseMapping, error)
 }
 
 func generateSQLForParsed(result downloader.CourseMapping,
-	schedules []parser.Schedule,
+	subjects []parser.Subject,
 	sqlIn chan []byte) {
 
 	log.Println("dispatch generate sql")
-	generatedSQL := schedule.GenerateSQL(&result.Course, schedules)
+	generatedSQL := schedule.GenerateSQL(&result.Course, subjects)
 	sqlIn <- generatedSQL
 }
 

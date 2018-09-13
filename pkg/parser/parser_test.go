@@ -131,7 +131,8 @@ func TestSchedule(t *testing.T) {
 		{GetSingleScheduleFixture(),
 			[]parser.Subject{
 				parser.Subject{
-					Id: "AB0601",
+					Id:    "AB0601",
+					Title: "COMMUNICATION MANAGEMENT FUNDAMENTALS",
 					Schedules: []parser.Schedule{
 						parser.Schedule{
 							Index: "00810", Type: "LEC/STUDIO", Group: "1",
@@ -152,7 +153,8 @@ func TestSchedule(t *testing.T) {
 		{GetFileReader("../../testdata/schedule-with-subject.html"),
 			[]parser.Subject{
 				parser.Subject{
-					Id: "AB0601",
+					Id:    "AB0601",
+					Title: "COMMUNICATION MANAGEMENT FUNDAMENTALS",
 					Schedules: []parser.Schedule{
 						parser.Schedule{
 							Index: "00731", Type: "LEC/STUDIO", Group: "1",

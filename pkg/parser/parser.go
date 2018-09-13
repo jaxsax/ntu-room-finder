@@ -61,7 +61,8 @@ func (c *Course) Id() uint64 {
 }
 
 func (a *Subject) Equal(b *Subject) bool {
-	return a.Id == b.Id
+	return a.Id == b.Id &&
+		a.Title == b.Title
 }
 
 func (a *AcademicSemester) Equal(b *AcademicSemester) bool {
@@ -287,7 +288,7 @@ func parseSchedule(n *html.Node) ([]Schedule, error) {
 
 func canParseSubject(n *html.Node) bool {
 	rows := TraverseNodes(n, lessonTrMatcher)
-	return len(rows) == 2
+	return len(rows) >= 2 && !canParseSchedule(n)
 }
 
 func parseSubject(n *html.Node) (Subject, error) {

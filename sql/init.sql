@@ -11,3 +11,11 @@ CREATE TABLE IF NOT EXISTS schedule (
     venue STRING NOT NULL,
     remark STRING
 );
+
+DROP TABLE IF EXISTS subject;
+
+CREATE TABLE IF NOT EXISTS subject (
+    id STRING NOT NULL,
+    title STRING NOT NULL,
+    rawAU STRING NOT NULL
+);
