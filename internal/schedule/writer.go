@@ -13,10 +13,10 @@ func GenerateSQL(course *parser.Course, subjects []parser.Subject) []byte {
         VALUES("%s", "%s", "%s", "%s", "%s", "%s", "%s", "%s", "%s");` + "\n"
 
 	var sqlBuilder bytes.Buffer
-	fmt.Fprintf(&sqlBuilder, "-- Schedules for course: %s\n", course.Text)
+	fmt.Fprintf(&sqlBuilder, "\n-- Schedules for course: %s\n", course.Text)
 	fmt.Fprintf(&sqlBuilder, "BEGIN TRANSACTION;\n")
 	for _, subject := range subjects {
-		fmt.Fprintf(&sqlBuilder, "-- Schedules for subject: %s\n", subject.Title)
+		fmt.Fprintf(&sqlBuilder, "\n-- Schedules for subject: %s\n\n", subject.Title)
 		for _, schedule := range subject.Schedules {
 			fmt.Fprintf(&sqlBuilder, template,
 				schedule.Index, schedule.Type, schedule.Group,
