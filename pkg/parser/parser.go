@@ -60,6 +60,10 @@ func (c *Course) Id() uint64 {
 	return hasher.Sum64()
 }
 
+func (a *Subject) Equal(b *Subject) bool {
+	return a.Id == b.Id
+}
+
 func (a *AcademicSemester) Equal(b *AcademicSemester) bool {
 	return a.Key == b.Key
 }
@@ -184,107 +188,168 @@ func FindCourses(body io.Reader) ([]Course, error) {
 	return courses, nil
 }
 
-func FindSchedule(body io.Reader) ([]Schedule, error) {
+func lessonTrMatcher(n *html.Node) (keep bool, exit bool) {
+	isTr := n.Type == html.ElementNode && n.DataAtom == atom.Tr
+	keep = isTr
+	return
+}
+
+// Accepts a html.Node containing a table
+func canParseSchedule(n *html.Node) bool {
+	headerMatcher := func(n *html.Node) (keep bool, exit bool) {
+		keep = n.DataAtom == atom.Th
+		return
+	}
+
+	headerSequence := []string{"INDEX", "TYPE", "GROUP", "DAY", "TIME", "VENUE", "REMARK"}
+	matchSequence := make([]bool, len(headerSequence))
+	headers := TraverseNodes(n, headerMatcher)
+
+	for i, header := range headers {
+		headerText := header.FirstChild.FirstChild.Data
+		if headerText == headerSequence[i] {
+			matchSequence[i] = true
+		}
+	}
+
+	for _, m := range matchSequence {
+		if !m {
+			return false
+		}
+	}
+
+	return true
+}
+
+func parseSchedule(n *html.Node) ([]Schedule, error) {
+	rows := TraverseNodes(n, lessonTrMatcher)
+	schedules := make([]Schedule, 0)
+
+	dataRows := rows[1:]
+	var cachedIndex string
+	for _, row := range dataRows {
+		var schedule Schedule
+		for i, td := 0, row.FirstChild.NextSibling; td != nil; i, td = i+1, td.NextSibling.NextSibling {
+			node := td.FirstChild.FirstChild
+			var text string
+			if node != nil {
+				text = strings.TrimSpace(node.Data)
+			}
+			switch i {
+			case 0:
+				if node != nil {
+					cachedIndex = text
+				}
+				schedule.Index = cachedIndex
+				break
+			case 1:
+				schedule.Type = text
+				break
+			case 2:
+				schedule.Group = text
+				break
+			case 3:
+				schedule.Day = text
+				break
+			case 4:
+				schedule.TimeText = text
+				if len(schedule.TimeText) <= 0 {
+					break
+				}
+				timeText := strings.Split(schedule.TimeText, "-")
+				startHour, startMinute, err := splitTime(timeText[0])
+				if err != nil {
+					return nil, err
+				}
+				schedule.TimeStart = time.Date(2018, 9, 12, startHour, startMinute, 0, 0, time.UTC)
+
+				endHour, endMinute, err := splitTime(timeText[1])
+				if err != nil {
+					return nil, err
+				}
+				schedule.TimeEnd = time.Date(2018, 9, 12, endHour, endMinute, 0, 0, time.UTC)
+
+				break
+			case 5:
+				schedule.Venue = text
+				break
+			case 6:
+				schedule.Remark = text
+				break
+			default:
+				fmt.Printf("unhandled index: %d\n", i)
+			}
+		}
+		schedules = append(schedules, schedule)
+	}
+	return schedules, nil
+}
+
+func canParseSubject(n *html.Node) bool {
+	rows := TraverseNodes(n, lessonTrMatcher)
+	return len(rows) == 2
+}
+
+func parseSubject(n *html.Node) (Subject, error) {
+	rows := TraverseNodes(n, lessonTrMatcher)
+	row := rows[0]
+
+	tdMatcher := func(n *html.Node) (keep bool, exit bool) {
+		keep = n.DataAtom == atom.Td
+		return
+	}
+
+	var subject Subject
+	cols := TraverseNodes(row, tdMatcher)
+	for i, col := range cols {
+		text := strings.TrimSpace(col.FirstChild.FirstChild.FirstChild.Data)
+		switch i {
+		case 0:
+			subject.Id = text
+			break
+		case 1:
+			subject.Title = text
+			break
+		case 2:
+			subject.AuRaw = text
+			break
+		}
+	}
+
+	return subject, nil
+}
+
+func FindSchedule(body io.Reader) ([]Subject, error) {
 	doc, err := html.Parse(body)
 	if err != nil {
 		return nil, err
 	}
 
-	headerMatcher := func(n *html.Node) (keep bool, exit bool) {
-		isHeader := n.Type == html.ElementNode && n.DataAtom == atom.Th
-		keep = isHeader
-
+	tableMatcher := func(n *html.Node) (keep bool, exit bool) {
+		keep = n.DataAtom == atom.Table
 		return
 	}
 
-	lessonMatcher := func(n *html.Node) (keep bool, exit bool) {
-		isTable := n.Type == html.ElementNode && n.DataAtom == atom.Table
+	subjects := make([]Subject, 0)
 
-		headerSequence := []string{"INDEX", "TYPE", "GROUP", "DAY", "TIME", "VENUE", "REMARK"}
-		headers := TraverseNodes(n, headerMatcher)
-
-		var matches bool = false
-		for i, header := range headers {
-			headerText := header.FirstChild.FirstChild.Data
-			if headerText == headerSequence[i%len(headerSequence)] {
-				matches = true
+	tables := TraverseNodes(doc, tableMatcher)
+	var subject Subject
+	for _, table := range tables {
+		if canParseSchedule(table) {
+			schedules, err := parseSchedule(table)
+			if err != nil {
+				return nil, err
+			}
+			subject.Schedules = schedules
+			subjects = append(subjects, subject)
+		} else if canParseSubject(table) {
+			subject, err = parseSubject(table)
+			if err != nil {
+				return nil, err
 			}
 		}
-		keep = isTable && matches
-		return
 	}
-
-	trMatcher := func(n *html.Node) (keep bool, exit bool) {
-		isTr := n.Type == html.ElementNode && n.DataAtom == atom.Tr
-
-		keep = isTr
-		return
-	}
-
-	schedules := make([]Schedule, 0)
-	lessonTable := TraverseNodes(doc, lessonMatcher)
-	for _, subject := range lessonTable {
-		rows := TraverseNodes(subject, trMatcher)
-		dataRows := rows[1:]
-
-		var cachedIndex string
-		for _, row := range dataRows {
-			var schedule Schedule
-			for i, td := 0, row.FirstChild.NextSibling; td != nil; i, td = i+1, td.NextSibling.NextSibling {
-				node := td.FirstChild.FirstChild
-				var text string
-				if node != nil {
-					text = strings.TrimSpace(node.Data)
-				}
-				switch i {
-				case 0:
-					if node != nil {
-						cachedIndex = text
-					}
-					schedule.Index = cachedIndex
-					break
-				case 1:
-					schedule.Type = text
-					break
-				case 2:
-					schedule.Group = text
-					break
-				case 3:
-					schedule.Day = text
-					break
-				case 4:
-					schedule.TimeText = text
-					if len(schedule.TimeText) <= 0 {
-						break
-					}
-					timeText := strings.Split(schedule.TimeText, "-")
-					startHour, startMinute, err := splitTime(timeText[0])
-					if err != nil {
-						return schedules, err
-					}
-					schedule.TimeStart = time.Date(2018, 9, 12, startHour, startMinute, 0, 0, time.UTC)
-
-					endHour, endMinute, err := splitTime(timeText[1])
-					if err != nil {
-						return schedules, err
-					}
-					schedule.TimeEnd = time.Date(2018, 9, 12, endHour, endMinute, 0, 0, time.UTC)
-
-					break
-				case 5:
-					schedule.Venue = text
-					break
-				case 6:
-					schedule.Remark = text
-					break
-				default:
-					fmt.Printf("unhandled index: %d\n", i)
-				}
-			}
-			schedules = append(schedules, schedule)
-		}
-	}
-	return schedules, nil
+	return subjects, nil
 }
 
 // Splits time from a 24 hour format into hours and minutes
