@@ -54,6 +54,14 @@ func (s *Schedule) Id() uint64 {
 	return hasher.Sum64()
 }
 
+func (c *Course) Id() uint64 {
+	hasher := fnv.New64()
+
+	hasher.Write([]byte(c.Key))
+
+	return hasher.Sum64()
+}
+
 func (a *AcademicSemester) Equal(b *AcademicSemester) bool {
 	return a.Key == b.Key
 }
@@ -111,7 +119,7 @@ func selectMatcher(nameAttr string) func(n *html.Node) (keep bool, exit bool) {
 	}
 }
 
-func (p *DefaultParser) FindLatestAcadSem(body io.Reader) (*AcademicSemester, error) {
+func FindLatestAcadSem(body io.Reader) (*AcademicSemester, error) {
 	doc, err := html.Parse(body)
 	if err != nil {
 		return &AcademicSemester{}, err
@@ -145,7 +153,7 @@ func (p *DefaultParser) FindLatestAcadSem(body io.Reader) (*AcademicSemester, er
 	return &AcademicSemester{}, ErrCantFindAcadSem
 }
 
-func (p *DefaultParser) FindCourses(body io.Reader) ([]Course, error) {
+func FindCourses(body io.Reader) ([]Course, error) {
 	courses := make([]Course, 0)
 
 	doc, err := html.Parse(body)
@@ -172,7 +180,6 @@ func (p *DefaultParser) FindCourses(body io.Reader) ([]Course, error) {
 			if err != nil {
 				return courses, ErrCantFindAttribute
 			}
-
 			courses = append(courses, Course{
 				Key:  key,
 				Text: text,

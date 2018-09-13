@@ -37,7 +37,7 @@ func getMainBody() ([]byte, error) {
 }
 
 func readLatestAcademicSemester(p *parser.DefaultParser, mainBody []byte) (*parser.AcademicSemester, error) {
-	sem, err := p.FindLatestAcadSem(bytes.NewReader(mainBody))
+	sem, err := parser.FindLatestAcadSem(bytes.NewReader(mainBody))
 	if err != nil {
 		return &parser.AcademicSemester{}, err
 	}
@@ -45,7 +45,7 @@ func readLatestAcademicSemester(p *parser.DefaultParser, mainBody []byte) (*pars
 }
 
 func readCourses(p *parser.DefaultParser, mainBody []byte) ([]parser.Course, error) {
-	courses, err := p.FindCourses(bytes.NewReader(mainBody))
+	courses, err := parser.FindCourses(bytes.NewReader(mainBody))
 	if err != nil {
 		return nil, err
 	}
@@ -67,7 +67,6 @@ func buildCourseInformation(s parser.AcademicSemester, c parser.Course) courseWi
 		semester: s,
 		course:   c,
 	}
-
 }
 
 type crawlResult struct {
@@ -114,33 +113,47 @@ func crawlCourse(in chan courseWithSemester, out chan crawlResult,
 	}
 }
 
-func Parse() {
-	go sigInt()
+func getParseFolderName() string {
+	year, month, day := time.Now().UTC().Date()
+	return fmt.Sprintf("%4d-%02d-%02d", year, month, day)
+}
 
-	outputFileName := "out.sql"
+func setupSqlOutput(f string) (*os.File, error) {
 	var outputFile *os.File
-	parse := parser.NewParser()
-
-	if _, err := os.Stat(outputFileName); os.IsExist(err) {
-		outputFile, err = os.OpenFile(outputFileName, os.O_APPEND|os.O_WRONLY, 0600)
+	if _, err := os.Stat(f); os.IsExist(err) {
+		outputFile, err = os.OpenFile(f, os.O_APPEND|os.O_WRONLY, 0600)
 		if err != nil {
-			log.Fatalf("failed to truncate %s %v", outputFileName, err)
-			return
+			log.Fatalf("failed to truncate %s %v", f, err)
+
+			return nil, err
 		}
 		outputFile.Truncate(0)
 		outputFile.Seek(0, 0)
 	} else {
-		outputFile, err = os.Create(outputFileName)
+		outputFile, err = os.Create(f)
 		if err != nil {
-			log.Fatalf("failed to create %s for writing %v", outputFileName, err)
+			log.Fatalf("failed to create %s for writing %v", f, err)
+			return nil, err
 		}
 	}
+	return outputFile, nil
+}
 
+func Parse() {
+	go sigInt()
+
+	outputFileName := "out.sql"
+	outputFile, err := setupSqlOutput(outputFileName)
+	if err != nil {
+		log.Fatalf("failed to setup %s %v", outputFileName, err)
+		return
+	}
 	defer outputFile.Close()
 
-	initSQL, err := ioutil.ReadFile("sql/init.sql")
+	initSQLFile := "sql/init.sql"
+	initSQL, err := ioutil.ReadFile(initSQLFile)
 	if err != nil {
-		log.Fatalf("failed to read sql/init.sql %v", err)
+		log.Fatalf("failed to read %s %v", initSQLFile, err)
 		return
 	}
 
@@ -150,12 +163,27 @@ func Parse() {
 		return
 	}
 
+	parseFolderName := getParseFolderName()
+	err = os.Mkdir(parseFolderName, 0755)
+	if err != nil {
+		log.Fatalf("failed to create cache folder %v", err)
+		return
+	}
+	mainBodyFile := fmt.Sprintf("%s/%s", parseFolderName, "main.html")
 	mainBody, err := getMainBody()
 	if err != nil {
 		log.Fatalf("failed to get main page: %v", err)
 		return
 	}
+	go func() {
+		log.Println("writing main body to parsed folder")
+		err = ioutil.WriteFile(mainBodyFile, mainBody, 0755)
+		if err != nil {
+			log.Fatalf("failed to write main body: %v", err)
+		}
+	}()
 
+	parse := parser.NewParser()
 	acadSem, err := readLatestAcademicSemester(parse, mainBody)
 	if err != nil {
 		log.Fatalf("failed to get latest acad sem: %v", err)

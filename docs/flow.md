@@ -1,6 +1,28 @@
 URL0=https://wish.wis.ntu.edu.sg/webexe/owa/aus_schedule.main
 URL1=https://wish.wis.ntu.edu.sg/webexe/owa/AUS_SCHEDULE.main_display1
 
+# Goroutines design
+
+# File structure
+
+TODAY=2018-09-13
+
+## $TODAY/main
+
+This is the page that was fetched to retrieve the latest academic semester and course list
+
+## $TODAY/mapping.json
+
+This json file maps a course hash to its real name
+
+## $TODAY/<hash>
+
+This folder contains the hash of the parameters which uniquely identify a course.
+This folder would contain all schedules that are parsed from $URL1
+
+## $TODAY/<hash>/mapping.json
+
+This json file maps the hash of the schedules to its real name
 
 # Component: Crawler
 

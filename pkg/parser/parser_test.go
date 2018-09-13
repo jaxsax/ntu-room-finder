@@ -70,7 +70,6 @@ func TestAcadSem(t *testing.T) {
 	}
 
 	for i, test := range cases {
-		parser := parser.NewParser()
 		result, err := parser.FindLatestAcadSem(test.body)
 		if !result.Equal(&test.expected) {
 			t.Errorf("id=%d expected=%q got=%q", i, test.expected, result)
@@ -112,7 +111,6 @@ func TestCourses(t *testing.T) {
 	}
 
 	for i, test := range cases {
-		parser := parser.NewParser()
 		result, err := parser.FindCourses(test.body)
 		if len(result) != test.expectedLength {
 			t.Errorf("id=%d expected_length=%d got=%d", i, test.expectedLength, len(result))
