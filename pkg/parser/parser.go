@@ -12,8 +12,6 @@ import (
 	"time"
 )
 
-type DefaultParser struct{}
-
 type AcademicSemester struct {
 	Key, Text string
 }
@@ -64,10 +62,6 @@ func (c *Course) Id() uint64 {
 
 func (a *AcademicSemester) Equal(b *AcademicSemester) bool {
 	return a.Key == b.Key
-}
-
-func NewParser() *DefaultParser {
-	return &DefaultParser{}
 }
 
 var (
