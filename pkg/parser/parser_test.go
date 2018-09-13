@@ -124,38 +124,42 @@ func TestCourses(t *testing.T) {
 func TestSchedule(t *testing.T) {
 	cases := []struct {
 		body        io.Reader
-		expected    []parser.Schedule
+		expected    parser.Subject
 		expectedErr error
 	}{
 		{GetSingleScheduleFixture(),
-			[]parser.Schedule{
-				parser.Schedule{
-					Index: "00810", Type: "LEC/STUDIO", Group: "1",
-					Day: "WED", TimeText: "1830-2130", Venue: "LT1A", Remark: "Teaching Wk11",
-				},
-				parser.Schedule{
-					Index: "00810", Type: "LEC/STUDIO", Group: "1",
-					Day: "WED", TimeText: "1830-2130", Venue: "LT2A", Remark: "Teaching Wk11",
-				},
-				parser.Schedule{
-					Index: "00810", Type: "SEM", Group: "1",
-					Day: "THU", TimeText: "0830-1030", Venue: "S4-CL1", Remark: "",
+			parser.Subject{
+				Schedules: []parser.Schedule{
+					parser.Schedule{
+						Index: "00810", Type: "LEC/STUDIO", Group: "1",
+						Day: "WED", TimeText: "1830-2130", Venue: "LT1A", Remark: "Teaching Wk11",
+					},
+					parser.Schedule{
+						Index: "00810", Type: "LEC/STUDIO", Group: "1",
+						Day: "WED", TimeText: "1830-2130", Venue: "LT2A", Remark: "Teaching Wk11",
+					},
+					parser.Schedule{
+						Index: "00810", Type: "SEM", Group: "1",
+						Day: "THU", TimeText: "0830-1030", Venue: "S4-CL1", Remark: "",
+					},
 				},
 			},
 			nil},
 		{GetFileReader("../../testdata/schedule-with-subject.html"),
-			[]parser.Schedule{
-				parser.Schedule{
-					Index: "00731", Type: "LEC/STUDIO", Group: "1",
-					Day: "TUE", TimeText: "1830-2130", Venue: "LT26", Remark: "Teaching Wk11",
+			parser.Subject{
+				Schedules: []parser.Schedule{
+					parser.Schedule{
+						Index: "00731", Type: "LEC/STUDIO", Group: "1",
+						Day: "TUE", TimeText: "1830-2130", Venue: "LT26", Remark: "Teaching Wk11",
+					},
 				},
 			}, nil},
 	}
 
 	for i, test := range cases {
 		result, err := parser.FindSchedule(test.body)
-		if len(result) != len(test.expected) {
-			t.Errorf("id=%d expected_length=%d got=%d", i, len(test.expected), len(result))
+		if len(result) != len(test.expected.Schedules) {
+			t.Errorf("id=%d expected_length=%d got=%d", i, len(test.expected.Schedules), len(result))
 		}
 		if err != test.expectedErr {
 			t.Errorf("id=%d expected=%s got=%s", i, test.expectedErr, err)

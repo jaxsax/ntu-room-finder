@@ -21,10 +21,10 @@ type Course struct {
 }
 
 type Subject struct {
-	Id    string
-	Title string
-	AuRaw string
-	Au    float32
+	Id        string
+	Title     string
+	AuRaw     string
+	Schedules []Schedule
 }
 
 type Schedule struct {
