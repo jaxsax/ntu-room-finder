@@ -154,16 +154,16 @@ func DownloadCourse(c courseLink, coursePageURL string) ([]byte, error) {
 	return nil, fmt.Errorf("error: %s", res.Status)
 }
 
-type courseMapping struct {
+type CourseMapping struct {
 	parser.Course
 	Index uint64
 }
 
 func CreateCourseMapping(path string, links []*courseLink) error {
 	log.Println("creating course mapping")
-	mappings := make([]courseMapping, len(links))
+	mappings := make([]CourseMapping, len(links))
 	for i, link := range links {
-		mappings[i] = courseMapping{Course: link.course, Index: link.course.Id()}
+		mappings[i] = CourseMapping{Course: link.course, Index: link.course.Id()}
 	}
 
 	if _, err := os.Stat(path); os.IsExist(err) {

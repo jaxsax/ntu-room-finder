@@ -190,7 +190,7 @@ func FindCourses(body io.Reader) ([]Course, error) {
 	return courses, nil
 }
 
-func (p *DefaultParser) FindSchedule(body io.Reader) ([]Schedule, error) {
+func FindSchedule(body io.Reader) ([]Schedule, error) {
 	doc, err := html.Parse(body)
 	if err != nil {
 		return nil, err

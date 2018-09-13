@@ -7,9 +7,9 @@ default: binaries
 binaries: $(wildcard cmd/**/*) $(PACKAGE_SOURCES) $(INTERNAL_SOURCES)
 	go install ./...
 
-.PHONY: run/crawler
-run/crawler: binaries
-	./bin/crawler
+.PHONY: run/parser
+run/parser: binaries
+	./bin/parser
 
 .PHONY: run/crawler
 run/downloader: binaries
