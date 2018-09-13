@@ -153,7 +153,6 @@ func TestSchedule(t *testing.T) {
 	}
 
 	for i, test := range cases {
-		parser := parser.NewParser()
 		result, err := parser.FindSchedule(test.body)
 		if len(result) != len(test.expected) {
 			t.Errorf("id=%d expected_length=%d got=%d", i, len(test.expected), len(result))
