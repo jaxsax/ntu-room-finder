@@ -148,7 +148,8 @@ func generateSQLForParsed(result downloader.CourseMapping,
 	subjects []parser.Subject,
 	sqlIn chan []byte) {
 
-	log.Println("dispatch generate sql")
+	log.Printf("generating sql for %s", result.Text)
+
 	generatedSQL := schedule.GenerateSQL(&result.Course, subjects)
 	sqlIn <- generatedSQL
 }
